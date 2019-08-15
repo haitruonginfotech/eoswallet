@@ -26,10 +26,10 @@ export default class App extends Component {
 
   constructor(props) {
     super(props);
-    state = {
+    this.state = {
       isLoggedIn: false
     }
-  }
+  } 
 
   render() {
     if (this.state.isLoggedIn) 
