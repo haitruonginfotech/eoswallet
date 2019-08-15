@@ -18,7 +18,7 @@ import {
   Alert
 } from 'react-native';
 
-import SignIn from "./src/SignIn";
+//import SignIn from "./src/SignIn";
 import LogIn from "./src/LogIn";
 import Dashboard from "./src/Dashboard";
 
