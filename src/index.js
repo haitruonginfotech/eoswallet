@@ -6,29 +6,15 @@ import { StatusBar } from 'react-native';
 import { ThemeProvider } from 'styled-components';
 import { Provider } from 'react-redux';
 
-import './config/ReactotronConfig';
+//import './config/ReactotronConfig';
 
-import ApplicationNavigator from './routes';
-import AppTheme from './styles';
-import store from './store';
+//import ApplicationNavigator from './routes';
+//import AppTheme from './styles';
+//import store from './store';
 
 const App = (): Object => (
   <Fragment>
-    <StatusBar
-      backgroundColor={AppTheme.colors.androidToolbarColor}
-      barStyle="light-content"
-      translucent
-      animated
-    />
-    <ThemeProvider
-      theme={AppTheme}
-    >
-      <Provider
-        store={store}
-      >
-        <ApplicationNavigator />
-      </Provider>
-    </ThemeProvider>
+    
   </Fragment>
 );
 
