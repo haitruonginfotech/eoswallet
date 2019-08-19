@@ -5,7 +5,7 @@ import { StatusBar, FlatList, View } from 'react-native';
 
 import SplashScreen from 'react-native-splash-screen';
 import styled from 'styled-components';
-
+/*
 import BottomPagination from './components/BottomPagination';
 import GetStartedButton from './components/GetStartedButton';
 import { SCREENS, TYPES } from './components/SCREENS_TYPES';
@@ -13,11 +13,11 @@ import IntroScreen from './components/IntroScreen';
 
 import { ROUTE_NAMES } from '~/routes/index';
 import appStyles from '~/styles';
-
+*/
 const Container = styled(View)`
   flex: 1;
 `;
-
+/*
 const IntroScreenWrapper = styled(View)`
   width: ${({ theme }) => theme.metrics.width}px;
   height: ${({ theme }) => theme.metrics.height}px;
@@ -35,7 +35,7 @@ const PAGES = [
   SCREENS[TYPES.WITH_YOUR_TASTE],
   SCREENS[TYPES.CHOOSE_YOUR_MEAL],
 ];
-
+*/
 type Props = {
   navigation: Object,
 };
@@ -45,7 +45,7 @@ type State = {
 };
 
 class OnboardingIntro extends Component<Props, State> {
-  state = {
+  /*state = {
     currentPageIndex: 0,
   };
 
@@ -144,7 +144,7 @@ class OnboardingIntro extends Component<Props, State> {
 
     return <BottomContent>{Controller}</BottomContent>;
   };
-
+*/
   render() {
     return (
       <Container>
@@ -154,8 +154,7 @@ class OnboardingIntro extends Component<Props, State> {
           translucent
           animated
         />
-        {this.renderPages()}
-        {this.renderPaginationController()}
+        
       </Container>
     );
   }

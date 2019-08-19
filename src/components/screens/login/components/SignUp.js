@@ -8,7 +8,8 @@ import styled from 'styled-components';
 import ButtonContent from './ButtonContent';
 import { DefaultText } from './Common';
 import Input from './Input';
-import appStyles from '~/styles';
+import appStyles from '../../../../styles';
+
 
 const Container = styled(View)`
   height: 100%;

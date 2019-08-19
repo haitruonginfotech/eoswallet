@@ -16,7 +16,7 @@ import styled from 'styled-components';
 import SignUpComponent from './components/SignUp';
 import LoginComponent from './components/Login';
 
-import appStyles from '~/styles';
+import appStyles from '../../../styles';
 
 const Container = styled(View)`
   flex: 1;
