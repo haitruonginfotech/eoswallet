@@ -8,13 +8,23 @@ import { Provider } from 'react-redux';
 
 //import './config/ReactotronConfig';
 
-//import ApplicationNavigator from './routes';
+import ApplicationNavigator from './routes';
 import AppTheme from './styles';
 //import store from './store';
 
 const App = (): Object => (
   <Fragment>
-    <Text>Hello World</Text>
+    <StatusBar
+      backgroundColor={AppTheme.colors.androidToolbarColor}
+      barStyle="light-content"
+      translucent
+      animated
+    />
+    <ThemeProvider
+      theme={AppTheme}
+    >
+     
+    </ThemeProvider>
   </Fragment>
 );
 
