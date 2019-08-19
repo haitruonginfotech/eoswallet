@@ -9,12 +9,12 @@ import { Provider } from 'react-redux';
 //import './config/ReactotronConfig';
 
 //import ApplicationNavigator from './routes';
-//import AppTheme from './styles';
+import AppTheme from './styles';
 //import store from './store';
 
 const App = (): Object => (
   <Fragment>
-    
+    <Text>Hello World</Text>
   </Fragment>
 );
 
