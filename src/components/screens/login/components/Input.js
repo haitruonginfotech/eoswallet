@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import styled from 'styled-components';
 
 import { ContentContainer } from './Common';
-import appStyles from '~/styles';
+import appStyles from '../../../../styles';
 
 const InputWrapper = styled(View)`
   width: 100%;
