@@ -5,11 +5,11 @@ import { StatusBar, FlatList, Platform, Text, View } from "react-native";
 
 import styled from "styled-components";
 
-import RestaurantItemList from "../../../../../../components/common/RestaurantListItem";
-import ProgressiveImage from "../../../../../../components/common/ProgressiveImage";
-import { Alert, TYPES } from "../../../../../../components/common/alert";
-import Loading from "../../../../../../components/common/Loading";
-import appStyles from "../../../../../../styles";
+import RestaurantItemList from "../../../../../components/common/RestaurantListItem";
+import ProgressiveImage from "../../../../../components/common/ProgressiveImage";
+import { Alert, TYPES } from "../../../../../components/common/alert";
+import Loading from "../../../../../components/common/Loading";
+import appStyles from "../../../../../styles";
 
 const getTextSize = (type: string): number => {
   const types = {
