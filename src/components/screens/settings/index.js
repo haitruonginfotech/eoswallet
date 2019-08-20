@@ -1,24 +1,24 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
   TouchableOpacity,
   ScrollView,
   Platform,
   Switch,
   Text,
-  View,
-} from 'react-native';
+  View
+} from "react-native";
 
-import styled from 'styled-components';
-import appStyle from '~/styles';
+import styled from "styled-components";
+import appStyle from "../../../styles";
 
 import {
   getItemFromStorage,
-  persistItemInStorage,
-} from '~/utils/AsyncStoarageManager';
+  persistItemInStorage
+} from "../../../utils/AsyncStoarageManager";
 
-import { SWITCH_STATE_REFS, getItemConfig, TYPES } from './ItemConfig';
+import { SWITCH_STATE_REFS, getItemConfig, TYPES } from "./ItemConfig";
 
 const Container = styled(View)`
   flex: 1;
@@ -29,7 +29,7 @@ const SectionTitleText = styled(Text)`
   color: ${({ theme }) => theme.colors.darkText};
   font-family: CircularStd-Bold;
   font-size: ${({ theme }) => {
-    const percentage = Platform.OS === 'ios' ? '4.2%' : '4.8%';
+    const percentage = Platform.OS === "ios" ? "4.2%" : "4.8%";
     return theme.metrics.getWidthFromDP(percentage);
   }}px;
 `;
@@ -40,7 +40,7 @@ const ItemWrapper = styled(View)`
 
 const LineSeparator = styled(View)`
   width: 100%;
-  height: ${({ theme }) => theme.metrics.getHeightFromDP('0.1%')};
+  height: ${({ theme }) => theme.metrics.getHeightFromDP("0.1%")};
   background-color: ${({ theme }) => theme.colors.gray};
 `;
 
@@ -54,7 +54,7 @@ const SelectedLanguageText = styled(Text)`
   color: ${({ theme }) => theme.colors.red};
   font-family: CircularStd-Medium;
   font-size: ${({ theme }) => {
-    const percentage = Platform.OS === 'ios' ? '4%' : '4.8%';
+    const percentage = Platform.OS === "ios" ? "4%" : "4.8%";
     return theme.metrics.getWidthFromDP(percentage);
   }}px;
 `;
@@ -64,7 +64,7 @@ const SmallText = styled(Text)`
   margin: ${({ theme }) => `${theme.metrics.extraSmallSize}px 0`};
   font-family: CircularStd-Book;
   font-size: ${({ theme }) => {
-    const percentage = Platform.OS === 'ios' ? '3.8%' : '4%';
+    const percentage = Platform.OS === "ios" ? "3.8%" : "4%";
     return theme.metrics.getWidthFromDP(percentage);
   }}px;
 `;
@@ -84,7 +84,7 @@ const MediumText = styled(Text)`
   margin-top: ${({ theme }) => theme.metrics.extraSmallSize};
   font-family: CircularStd-Bold;
   font-size: ${({ theme }) => {
-    const percentage = Platform.OS === 'ios' ? '4%' : '4.5%';
+    const percentage = Platform.OS === "ios" ? "4%" : "4.5%";
     return theme.metrics.getWidthFromDP(percentage);
   }}px;
 `;
@@ -97,9 +97,8 @@ const OptionWithouDescriptionWrapper = styled(View)`
 `;
 
 const MultipleOptionsTitleWrapper = styled(View)`
-  padding: ${({ theme }) => `${theme.metrics.largeSize}px 0 ${theme.metrics.mediumSize}px ${
-    theme.metrics.largeSize
-  }px`};
+  padding: ${({ theme }) =>
+    `${theme.metrics.largeSize}px 0 ${theme.metrics.mediumSize}px ${theme.metrics.largeSize}px`};
 `;
 
 type State = {
@@ -107,7 +106,7 @@ type State = {
   whenIsAboutPromotions: boolean,
   notificationsSound: boolean,
   promotionsNearMe: boolean,
-  whenPastSearch: boolean,
+  whenPastSearch: boolean
 };
 
 class Settings extends Component<{}, State> {
@@ -116,41 +115,41 @@ class Settings extends Component<{}, State> {
     whenIsAboutPromotions: false,
     notificationsSound: false,
     promotionsNearMe: false,
-    whenPastSearch: false,
+    whenPastSearch: false
   };
 
   async componentDidMount() {
     const receiveAllNotificationsFromStorage = await getItemFromStorage(
       SWITCH_STATE_REFS.RECEIVE_ALL_NOTIFICATIONS,
-      'false',
+      "false"
     );
 
     const whenAboutPromotionsFromStorage = await getItemFromStorage(
       SWITCH_STATE_REFS.WHEN_ABOUT_DISCOUNTS,
-      'false',
+      "false"
     );
 
     const notificationsSoundFromStorage = await getItemFromStorage(
       SWITCH_STATE_REFS.NOTIFICATIONS_SOUND,
-      'false',
+      "false"
     );
 
     const receiveNearMeFromStorage = await getItemFromStorage(
       SWITCH_STATE_REFS.PROMOTIONS_NEAR_ME,
-      'false',
+      "false"
     );
 
     const whenPastSearchFromStorage = await getItemFromStorage(
       SWITCH_STATE_REFS.WHEN_PAST_SEARCH,
-      'false',
+      "false"
     );
 
     this.setState({
-      receiveAllNotifications: receiveAllNotificationsFromStorage === 'true',
-      whenIsAboutPromotions: whenAboutPromotionsFromStorage === 'true',
-      notificationsSound: notificationsSoundFromStorage === 'true',
-      promotionsNearMe: receiveNearMeFromStorage === 'true',
-      whenPastSearch: whenPastSearchFromStorage === 'true',
+      receiveAllNotifications: receiveAllNotificationsFromStorage === "true",
+      whenIsAboutPromotions: whenAboutPromotionsFromStorage === "true",
+      notificationsSound: notificationsSoundFromStorage === "true",
+      promotionsNearMe: receiveNearMeFromStorage === "true",
+      whenPastSearch: whenPastSearchFromStorage === "true"
     });
   }
 
@@ -160,7 +159,7 @@ class Settings extends Component<{}, State> {
     const value = !state[option];
 
     this.setState({
-      [option]: value,
+      [option]: value
     });
 
     await persistItemInStorage(option, value);
@@ -179,7 +178,7 @@ class Settings extends Component<{}, State> {
 
   renderOptionWithDescription = (
     title: string,
-    description: string,
+    description: string
   ): Object => (
     <OptionTextWrapper>
       <SectionTitleText>{title}</SectionTitleText>
@@ -196,15 +195,15 @@ class Settings extends Component<{}, State> {
       : appStyle.colors.white;
     const trackColor = {
       true:
-        Platform.OS === 'android'
+        Platform.OS === "android"
           ? appStyle.colors.activeSwitch
           : appStyle.colors.primaryColor,
-      false: Platform.OS === 'android' ? appStyle.colors.inactiveSwitch : '',
+      false: Platform.OS === "android" ? appStyle.colors.inactiveSwitch : ""
     };
 
     return (
       <Switch
-        thumbColor={Platform.OS === 'android' ? thumbTintColor : ''}
+        thumbColor={Platform.OS === "android" ? thumbTintColor : ""}
         onValueChange={() => this.handleSwitchToggle(id)}
         trackColor={trackColor}
         value={value}
@@ -243,9 +242,7 @@ class Settings extends Component<{}, State> {
   render() {
     return (
       <Container>
-        <ScrollView
-          alwaysBounceVertical={false}
-        >
+        <ScrollView alwaysBounceVertical={false}>
           {this.renderSelectLanguageSection()}
           <LineSeparator />
           {this.renderItemWitDescription(TYPES.PROMOTIONS_NEAR_ME)}

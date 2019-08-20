@@ -1,31 +1,31 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { Creators as RestaurantCreators } from '~/store/ducks/restaurant';
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import { Creators as RestaurantCreators } from "../../../store/ducks/restaurant";
 
-import { getItemFromStorage } from '~/utils/AsyncStoarageManager';
-import { handleHiddenHeaderStyle } from '~/routes/headerUtils';
-import CONSTANTS from '~/utils/CONSTANTS';
+import { getItemFromStorage } from "../../../utils/AsyncStoarageManager";
+import { handleHiddenHeaderStyle } from "../../../routes/headerUtils";
+import CONSTANTS from "../../../utils/CONSTANTS";
 
-import RestaurantDetail from './RestaurantDetail';
+import RestaurantDetail from "./RestaurantDetail";
 
 type Props = {
   requestRestaurantDetailRequest: Function,
   resetState: Function,
   restaurant: Object,
-  navigation: Object,
+  navigation: Object
 };
 
 type State = {
-  userLocation: Object,
+  userLocation: Object
 };
 
 class RestaurantDetailContainer extends Component<Props, State> {
   state = {
-    userLocation: { ...CONSTANTS.FORTALEZA_CITY_LOCATION },
+    userLocation: { ...CONSTANTS.FORTALEZA_CITY_LOCATION }
   };
 
   async componentDidMount() {
@@ -49,15 +49,16 @@ class RestaurantDetailContainer extends Component<Props, State> {
   handleRecoverUserLocationFromStorage = async (): any => {
     const persistedUserLocation = await getItemFromStorage(
       CONSTANTS.USER_LOCATION,
-      CONSTANTS.FORTALEZA_CITY_LOCATION,
+      CONSTANTS.FORTALEZA_CITY_LOCATION
     );
 
-    const userLocation = typeof persistedUserLocation === 'string'
-      ? JSON.parse(persistedUserLocation)
-      : persistedUserLocation;
+    const userLocation =
+      typeof persistedUserLocation === "string"
+        ? JSON.parse(persistedUserLocation)
+        : persistedUserLocation;
 
     this.setState({
-      userLocation,
+      userLocation
     });
   };
 
@@ -65,7 +66,7 @@ class RestaurantDetailContainer extends Component<Props, State> {
     const { requestRestaurantDetailRequest, navigation } = this.props;
     const { userLocation } = this.state;
 
-    const id = navigation.getParam(CONSTANTS.NAVIGATION_PARAM_ID, '');
+    const id = navigation.getParam(CONSTANTS.NAVIGATION_PARAM_ID, "");
 
     requestRestaurantDetailRequest(userLocation, id);
   };
@@ -74,20 +75,18 @@ class RestaurantDetailContainer extends Component<Props, State> {
     const { userLocation } = this.state;
     const { restaurant } = this.props;
 
-    return <RestaurantDetail
-      userLocation={userLocation}
-      {...restaurant}
-    />;
+    return <RestaurantDetail userLocation={userLocation} {...restaurant} />;
   }
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators(RestaurantCreators, dispatch);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(RestaurantCreators, dispatch);
 
 const mapStateToProps = state => ({
-  restaurant: state.restaurant,
+  restaurant: state.restaurant
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(RestaurantDetailContainer);

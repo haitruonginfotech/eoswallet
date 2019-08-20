@@ -1,30 +1,29 @@
 // @flow
 
-import React, { Component, Fragment } from 'react';
-import {
-  TouchableWithoutFeedback, Image, Text, View,
-} from 'react-native';
+import React, { Component, Fragment } from "react";
+import { TouchableWithoutFeedback, Image, Text, View } from "react-native";
 
-import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
-import { withNavigation } from 'react-navigation';
+import ShimmerPlaceholder from "react-native-shimmer-placeholder";
+import { withNavigation } from "react-navigation";
 
-import styled from 'styled-components';
+import styled from "styled-components";
 
-import { ROUTE_NAMES } from '~/components/screens/home/routes';
-import ReviewStars from '~/components/common/ReviewStars';
-import FlagPrice from '~/components/common/FlagPrice';
-import CONSTANTS from '~/utils/CONSTANTS';
+import { ROUTE_NAMES } from "../../../../../../components/screens/home/routes";
+import ReviewStars from "../../../../../../components/common/ReviewStars";
+import FlagPrice from "../../../../../../components/common/FlagPrice";
+import CONSTANTS from "../../../../../../utils/CONSTANTS";
 
 const Container = styled(View)`
-  width: ${({ theme }) => theme.metrics.getWidthFromDP('28%')};
-  height: ${({ theme }) => theme.metrics.getHeightFromDP('30%')};
-  margin-left: ${({ theme, isFirst }) => (isFirst ? theme.metrics.largeSize : 0)}px;
+  width: ${({ theme }) => theme.metrics.getWidthFromDP("28%")};
+  height: ${({ theme }) => theme.metrics.getHeightFromDP("30%")};
+  margin-left: ${({ theme, isFirst }) =>
+    isFirst ? theme.metrics.largeSize : 0}px;
   margin-right: ${({ theme }) => theme.metrics.largeSize}px;
 `;
 
 const ImageShimmerOverlay = styled(ShimmerPlaceholder).attrs({
   visible: false,
-  autoRun: true,
+  autoRun: true
 })`
   width: 100%;
   height: 100%;
@@ -41,7 +40,7 @@ const DarkLayer = styled(View)`
 `;
 
 const DisheImage = styled(Image).attrs(({ imageURL }) => ({
-  source: { uri: imageURL },
+  source: { uri: imageURL }
 }))`
   width: 100%;
   height: 70%;
@@ -55,13 +54,13 @@ const BottomWrapper = styled(View)`
 `;
 
 const DisheTitle = styled(Text).attrs({
-  ellipsizeMode: 'tail',
-  numberOfLines: 1,
+  ellipsizeMode: "tail",
+  numberOfLines: 1
 })`
   margin-left: ${({ theme }) => theme.metrics.extraSmallSize}px;
   padding-bottom: ${({ theme }) => theme.metrics.extraSmallSize}px;
   color: ${({ theme }) => theme.colors.darkText};
-  font-size: ${({ theme }) => theme.metrics.getWidthFromDP('4%')}px;
+  font-size: ${({ theme }) => theme.metrics.getWidthFromDP("4%")}px;
   font-family: CircularStd-Bold;
 `;
 
@@ -78,21 +77,21 @@ type Props = {
   title: string,
   stars: number,
   price: number,
-  id: string,
+  id: string
 };
 
 type State = {
-  isDisheImageLoaded: boolean,
+  isDisheImageLoaded: boolean
 };
 
 class PopularSectionListItem extends Component<Props, State> {
   state = {
-    isDisheImageLoaded: false,
+    isDisheImageLoaded: false
   };
 
   onDisheImageLoaded = () => {
     this.setState({
-      isDisheImageLoaded: true,
+      isDisheImageLoaded: true
     });
   };
 
@@ -116,9 +115,7 @@ class PopularSectionListItem extends Component<Props, State> {
       <Fragment>
         <DarkLayer>
           <FlagPriceWrapper>
-            <FlagPrice
-              price={price}
-            />
+            <FlagPrice price={price} />
           </FlagPriceWrapper>
         </DarkLayer>
         <BottomWrapper>
@@ -141,14 +138,12 @@ class PopularSectionListItem extends Component<Props, State> {
 
     return (
       <Fragment>
-        <Container
-          isFirst={isFirst}
-        >
+        <Container isFirst={isFirst}>
           <TouchableWithoutFeedback
             onPress={() => {
               navigation.navigate(ROUTE_NAMES.DISH_DETAIL, {
                 [CONSTANTS.NAVIGATION_PARAM_IS_DISH_DETAIL_REVIEW_MODE]: true,
-                [CONSTANTS.NAVIGATION_PARAM_ID]: id,
+                [CONSTANTS.NAVIGATION_PARAM_ID]: id
               });
             }}
             disabled={!isDisheImageLoaded}

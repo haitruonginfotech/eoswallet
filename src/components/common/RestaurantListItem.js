@@ -1,16 +1,16 @@
 // @flow
 
-import React, { Fragment } from 'react';
-import { TouchableWithoutFeedback, Text, View } from 'react-native';
+import React, { Fragment } from "react";
+import { TouchableWithoutFeedback, Text, View } from "react-native";
 
-import { withNavigation } from 'react-navigation';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import FastImage from 'react-native-fast-image';
+import { withNavigation } from "react-navigation";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import FastImage from "react-native-fast-image";
 
-import styled from 'styled-components';
+import styled from "styled-components";
 
-import CONSTANTS from '~/utils/CONSTANTS';
-import ReviewStars from './ReviewStars';
+import CONSTANTS from "../../utils/CONSTANTS";
+import ReviewStars from "./ReviewStars";
 
 const CardContainer = styled(View)`
   width: 100%;
@@ -42,7 +42,7 @@ const RestaurantImageWrapper = styled(View)`
 `;
 
 const RestaurantImage = styled(FastImage).attrs(({ imageURL }) => ({
-  source: { uri: imageURL },
+  source: { uri: imageURL }
 }))`
   width: 100%;
   height: 100%;
@@ -53,7 +53,7 @@ const RestaurantImage = styled(FastImage).attrs(({ imageURL }) => ({
 const Name = styled(Text)`
   color: ${({ theme }) => theme.colors.defaultWhite};
   margin-bottom: ${({ theme }) => theme.metrics.extraSmallSize}px;
-  font-size: ${({ theme }) => theme.metrics.getWidthFromDP('5%')}px;
+  font-size: ${({ theme }) => theme.metrics.getWidthFromDP("5%")}px;
   font-family: CircularStd-Black;
 `;
 
@@ -67,26 +67,24 @@ const AddressWrapper = styled(View)`
 
 const Address = styled(Text)`
   color: ${({ theme }) => theme.colors.defaultWhite};
-  font-size: ${({ theme }) => theme.metrics.getWidthFromDP('4%')}px;
+  font-size: ${({ theme }) => theme.metrics.getWidthFromDP("4%")}px;
   margin-left: ${({ theme }) => theme.metrics.extraSmallSize}px;
   font-family: CircularStd-Medium;
 `;
 
 const AddressIcon = styled(Icon).attrs({
-  name: 'map-marker',
-  size: 20,
+  name: "map-marker",
+  size: 20
 })`
   color: ${({ theme }) => theme.colors.defaultWhite};
 `;
 
 const renderRestaurantImage = (
   thumbnailImageURL: string,
-  imageURL: string,
+  imageURL: string
 ): Object => (
   <RestaurantImageWrapper>
-    <RestaurantImage
-      imageURL={imageURL}
-    />
+    <RestaurantImage imageURL={imageURL} />
   </RestaurantImageWrapper>
 );
 
@@ -102,7 +100,7 @@ const renderBottomRow = (address: string): Object => (
 const renderRestaurantInfo = (
   name: string,
   stars: number,
-  address: string,
+  address: string
 ): Object => (
   <Content>
     <Name>{name}</Name>
@@ -124,7 +122,7 @@ type Props = {
   address: string,
   stars: number,
   name: string,
-  id: string,
+  id: string
 };
 
 const RestaurantItemList = ({
@@ -134,13 +132,14 @@ const RestaurantItemList = ({
   address,
   stars,
   name,
-  id,
+  id
 }: Props): Object => (
   <CardContainer>
     <TouchableWithoutFeedback
-      onPress={() => navigation.navigate(CONSTANTS.ROUTE_RESTAURANT_DETAIL, {
-        [CONSTANTS.NAVIGATION_PARAM_ID]: id,
-      })
+      onPress={() =>
+        navigation.navigate(CONSTANTS.ROUTE_RESTAURANT_DETAIL, {
+          [CONSTANTS.NAVIGATION_PARAM_ID]: id
+        })
       }
     >
       <ContentWrapper>

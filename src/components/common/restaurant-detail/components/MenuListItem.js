@@ -1,18 +1,18 @@
 // @flow
 
-import React from 'react';
-import { TouchableWithoutFeedback, Text, View } from 'react-native';
+import React from "react";
+import { TouchableWithoutFeedback, Text, View } from "react-native";
 
-import { withNavigation } from 'react-navigation';
-import FastImage from 'react-native-fast-image';
-import styled from 'styled-components';
+import { withNavigation } from "react-navigation";
+import FastImage from "react-native-fast-image";
+import styled from "styled-components";
 
-import ReviewStars from '~/components/common/ReviewStars';
-import FlagPrice from '~/components/common/FlagPrice';
-import CONSTANTS from '~/utils/CONSTANTS';
+import ReviewStars from "../../../../components/common/ReviewStars";
+import FlagPrice from "../../../../components/common/FlagPrice";
+import CONSTANTS from "../../../../utils/CONSTANTS";
 
 const Container = styled(View)`
-  width: ${({ theme }) => theme.metrics.getWidthFromDP('45%')}px;
+  width: ${({ theme }) => theme.metrics.getWidthFromDP("45%")}px;
   height: 100%;
   margin-horizontal: ${({ theme }) => theme.metrics.smallSize};
 `;
@@ -30,7 +30,7 @@ const DarkLayer = styled(View)`
 `;
 
 const DishImage = styled(FastImage).attrs(({ imageURL }) => ({
-  source: { uri: imageURL },
+  source: { uri: imageURL }
 }))`
   width: 100%;
   height: 70%;
@@ -38,13 +38,13 @@ const DishImage = styled(FastImage).attrs(({ imageURL }) => ({
 `;
 
 const DishTitle = styled(Text).attrs({
-  ellipsizeMode: 'tail',
-  numberOfLines: 1,
+  ellipsizeMode: "tail",
+  numberOfLines: 1
 })`
   margin-bottom: ${({ theme }) => theme.metrics.extraSmallSize}px;
-  margin-top: ${({ theme }) => theme.metrics.getWidthFromDP('0.5%')}px;
+  margin-top: ${({ theme }) => theme.metrics.getWidthFromDP("0.5%")}px;
   color: ${({ theme }) => theme.colors.darkText};
-  font-size: ${({ theme }) => theme.metrics.getWidthFromDP('4.5%')}px;
+  font-size: ${({ theme }) => theme.metrics.getWidthFromDP("4.5%")}px;
   font-family: CircularStd-Medium;
 `;
 
@@ -55,7 +55,7 @@ type Props = {
   title: string,
   price: number,
   stars: number,
-  id: string,
+  id: string
 };
 
 const MenuListItem = ({
@@ -65,25 +65,22 @@ const MenuListItem = ({
   price,
   stars,
   title,
-  id,
+  id
 }: Props): Object => (
   <Container>
     <TouchableWithoutFeedback
-      onPress={() => navigation.navigate(CONSTANTS.ROUTE_DISH_DETAIL_REVIEW, {
-        [CONSTANTS.NAVIGATION_PARAM_IS_DISH_DETAIL_REVIEW_MODE]: false,
-        [CONSTANTS.NAVIGATION_PARAM_ID]: id,
-      })
+      onPress={() =>
+        navigation.navigate(CONSTANTS.ROUTE_DISH_DETAIL_REVIEW, {
+          [CONSTANTS.NAVIGATION_PARAM_IS_DISH_DETAIL_REVIEW_MODE]: false,
+          [CONSTANTS.NAVIGATION_PARAM_ID]: id
+        })
       }
     >
       <View>
-        <DishImage
-          imageURL={imageURL}
-        />
+        <DishImage imageURL={imageURL} />
         <DarkLayer>
           <FlagPriceWrapper>
-            <FlagPrice
-              price={price}
-            />
+            <FlagPrice price={price} />
           </FlagPriceWrapper>
         </DarkLayer>
         <DishTitle>{title}</DishTitle>

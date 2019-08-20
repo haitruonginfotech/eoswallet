@@ -1,26 +1,25 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { Creators as EventCreators } from '~/store/ducks/events';
-
-import { handleHiddenHeaderStyle } from '~/routes/headerUtils';
-import EventDetails from './EventDetails';
-import CONSTANTS from '~/utils/CONSTANTS';
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import { Creators as EventCreators } from "../../../../../../store/ducks/events";
+import { handleHiddenHeaderStyle } from "../../../../../../routes/headerUtils";
+import EventDetails from "./EventDetails";
+import CONSTANTS from "../../../../../../utils/CONSTANTS";
 
 type Props = {
   requestEventDetails: Function,
   navigation: Function,
-  events: Object,
+  events: Object
 };
 
 class EventDetailsContainer extends Component<Props, {}> {
   componentDidMount() {
     const { requestEventDetails, navigation } = this.props;
 
-    const id = navigation.getParam(CONSTANTS.NAVIGATION_PARAM_ID, '');
+    const id = navigation.getParam(CONSTANTS.NAVIGATION_PARAM_ID, "");
 
     requestEventDetails(id);
   }
@@ -35,19 +34,18 @@ class EventDetailsContainer extends Component<Props, {}> {
   render() {
     const { events } = this.props;
 
-    return <EventDetails
-      {...events}
-    />;
+    return <EventDetails {...events} />;
   }
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators(EventCreators, dispatch);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(EventCreators, dispatch);
 
 const mapStateToProps = state => ({
-  events: state.events,
+  events: state.events
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(EventDetailsContainer);

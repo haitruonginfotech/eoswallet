@@ -1,16 +1,16 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { Creators as DishCreators } from '~/store/ducks/dish';
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import { Creators as DishCreators } from "../../../../../../store/ducks/dish";
 
-import AllYouMightLike from './AllYouMightLike';
+import AllYouMightLike from "./AllYouMightLike";
 
 type Props = {
   requestAllDishes: Function,
-  dish: Object,
+  dish: Object
 };
 
 class SeeAllYouMightLikeContainer extends Component<Props, {}> {
@@ -23,19 +23,18 @@ class SeeAllYouMightLikeContainer extends Component<Props, {}> {
   render() {
     const { dish } = this.props;
 
-    return <AllYouMightLike
-      {...dish}
-    />;
+    return <AllYouMightLike {...dish} />;
   }
 }
 
 const mapStateToProps = state => ({
-  dish: state.dish,
+  dish: state.dish
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators(DishCreators, dispatch);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(DishCreators, dispatch);
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(SeeAllYouMightLikeContainer);

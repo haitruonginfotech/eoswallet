@@ -1,22 +1,20 @@
 // @flow
 
-import React from 'react';
-import {
-  StatusBar, FlatList, Platform, Text, View,
-} from 'react-native';
+import React from "react";
+import { StatusBar, FlatList, Platform, Text, View } from "react-native";
 
-import styled from 'styled-components';
+import styled from "styled-components";
 
-import RestaurantItemList from '~/components/common/RestaurantListItem';
-import ProgressiveImage from '~/components/common/ProgressiveImage';
-import { Alert, TYPES } from '~/components/common/alert';
-import Loading from '~/components/common/Loading';
-import appStyles from '~/styles';
+import RestaurantItemList from "../../../../../../components/common/RestaurantListItem";
+import ProgressiveImage from "../../../../../../components/common/ProgressiveImage";
+import { Alert, TYPES } from "../../../../../../components/common/alert";
+import Loading from "../../../../../../components/common/Loading";
+import appStyles from "../../../../../../styles";
 
 const getTextSize = (type: string): number => {
   const types = {
-    restaurantsParticipating: Platform.OS === 'android' ? '5%' : '4.2%',
-    title: Platform.OS === 'android' ? '5.5%' : '6%',
+    restaurantsParticipating: Platform.OS === "android" ? "5%" : "4.2%",
+    title: Platform.OS === "android" ? "5.5%" : "6%"
   };
 
   return appStyles.metrics.getWidthFromDP(types[type]);
@@ -42,7 +40,7 @@ const ImageWrapper = styled(View)`
 const HeaderCotainer = styled(View)`
   width: 100%;
   height: ${({ theme }) => {
-    const percentage = Platform.OS === 'android' ? '33%' : '30%';
+    const percentage = Platform.OS === "android" ? "33%" : "30%";
     return theme.metrics.getHeightFromDP(percentage);
   }}px;
   justify-content: flex-end;
@@ -57,27 +55,27 @@ const DarkWrapper = styled(View)`
 `;
 
 const EventTitle = styled(Text).attrs({
-  ellipsizeMode: 'tail',
-  numberOfLines: 1,
+  ellipsizeMode: "tail",
+  numberOfLines: 1
 })`
   color: ${({ theme }) => theme.colors.defaultWhite};
-  font-size: ${() => getTextSize('title')}px;
+  font-size: ${() => getTextSize("title")}px;
   font-family: CircularStd-Black;
 `;
 
 const EventDescription = styled(Text).attrs({
-  ellipsizeMode: 'tail',
-  numberOfLines: 3,
+  ellipsizeMode: "tail",
+  numberOfLines: 3
 })`
   margin-top: ${({ theme }) => theme.metrics.extraSmallSize}px;
   margin-bottom: ${({ theme }) => theme.metrics.smallSize}px;
   color: ${({ theme }) => theme.colors.defaultWhite};
-  font-size: ${({ theme }) => theme.metrics.getWidthFromDP('4.3%')}px;
+  font-size: ${({ theme }) => theme.metrics.getWidthFromDP("4.3%")}px;
   font-family: CircularStd-Medium;
 `;
 
 const RestaurantParticipatingText = styled(Text)`
-  font-size: ${() => getTextSize('restaurantsParticipating')}px;
+  font-size: ${() => getTextSize("restaurantsParticipating")}px;
   font-family: CircularStd-Black;
   color: ${({ theme }) => theme.colors.defaultWhite};
 `;
@@ -85,12 +83,12 @@ const RestaurantParticipatingText = styled(Text)`
 type Props = {
   eventDetails: Object,
   loading: boolean,
-  error: boolean,
+  error: boolean
 };
 
 const renderHeader = (
   eventDetails: Object,
-  numberRestaurantsParticipating: number,
+  numberRestaurantsParticipating: number
 ): Object => (
   <HeaderCotainer>
     <ImageWrapper>
@@ -110,7 +108,7 @@ const renderHeader = (
 );
 
 const renderRestaurantList = (
-  restaurantsParticipating: Array<Object>,
+  restaurantsParticipating: Array<Object>
 ): Object => (
   <ListWrapper>
     <FlatList
@@ -133,27 +131,25 @@ const renderRestaurantList = (
 const EventDetailsContainer = ({
   loading,
   error,
-  eventDetails,
+  eventDetails
 }: Props): Object => {
-  const shouldShowContent = !loading && !error && Object.keys(eventDetails).length > 0;
+  const shouldShowContent =
+    !loading && !error && Object.keys(eventDetails).length > 0;
 
   return (
     <Container>
       <StatusBar
         backgroundColor="transparent"
-        barStyle={error || loading ? 'dark-content' : 'light-content'}
+        barStyle={error || loading ? "dark-content" : "light-content"}
         translucent
         animated
       />
       {loading && <Loading />}
       {error && (
-        <Alert
-          type={TYPES.ERROR_SERVER_CONNECTION}
-          withExtraTopPadding
-        />
+        <Alert type={TYPES.ERROR_SERVER_CONNECTION} withExtraTopPadding />
       )}
-      {shouldShowContent
-        && renderHeader(eventDetails.details, eventDetails.restaurants.length)}
+      {shouldShowContent &&
+        renderHeader(eventDetails.details, eventDetails.restaurants.length)}
       {shouldShowContent && renderRestaurantList(eventDetails.restaurants)}
     </Container>
   );

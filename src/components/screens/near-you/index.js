@@ -1,39 +1,39 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { Creators as NearbyRestaurantsActions } from '~/store/ducks/nearby-restaurants';
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import { Creators as NearbyRestaurantsActions } from "../../../store/ducks/nearby-restaurants";
 
-import { getItemFromStorage } from '~/utils/AsyncStoarageManager';
-import dishesTypesItems from './dishesTypesItems';
-import CONSTANTS from '~/utils/CONSTANTS';
+import { getItemFromStorage } from "../../../utils/AsyncStoarageManager";
+import dishesTypesItems from "./dishesTypesItems";
+import CONSTANTS from "../../../utils/CONSTANTS";
 
-import NearYouComponent from './components/NearYou';
+import NearYouComponent from "./components/NearYou";
 
 type Props = {
   requestNearbyRestaurants: Function,
-  nearbyRestaurants: Object,
+  nearbyRestaurants: Object
 };
 
 type State = {
   restaurantsCached: Array<Object>,
   indexDishesTypeSelected: number,
   indexRestaurantSelected: number,
-  userLocation: Object,
+  userLocation: Object
 };
 
 class NearYouContainer extends Component<Props, State> {
   state = {
     userLocation: {
       latitude: CONSTANTS.FORTALEZA_CITY_LOCATION.latitude,
-      longitude: CONSTANTS.FORTALEZA_CITY_LOCATION.longitude,
+      longitude: CONSTANTS.FORTALEZA_CITY_LOCATION.longitude
     },
     shouldMoveRestaurantList: false,
     indexDishesTypeSelected: 0,
     indexRestaurantSelected: 0,
-    restaurantsCached: [],
+    restaurantsCached: []
   };
 
   async componentDidMount() {
@@ -41,8 +41,8 @@ class NearYouContainer extends Component<Props, State> {
       CONSTANTS.USER_LOCATION,
       [
         CONSTANTS.FORTALEZA_CITY_LOCATION.latitude,
-        CONSTANTS.FORTALEZA_CITY_LOCATION.longitude,
-      ],
+        CONSTANTS.FORTALEZA_CITY_LOCATION.longitude
+      ]
     );
 
     this.handleGetUserLocation(persistedUserLocation);
@@ -54,11 +54,11 @@ class NearYouContainer extends Component<Props, State> {
     const { restaurants } = nearbyRestaurants.data;
 
     const cached = Object.assign([], restaurantsCached, {
-      [indexDishesTypeSelected]: restaurants,
+      [indexDishesTypeSelected]: restaurants
     });
 
     this.setState({
-      restaurantsCached: cached,
+      restaurantsCached: cached
     });
   }
 
@@ -84,9 +84,9 @@ class NearYouContainer extends Component<Props, State> {
       {
         shouldMoveRestaurantList: true,
         indexRestaurantSelected: 0,
-        indexDishesTypeSelected,
+        indexDishesTypeSelected
       },
-      () => handleRestaurantsSelection(),
+      () => handleRestaurantsSelection()
     );
   };
 
@@ -99,13 +99,13 @@ class NearYouContainer extends Component<Props, State> {
 
     this.setState({
       indexRestaurantSelected: indexMarkerSelected,
-      shouldMoveRestaurantList: true,
+      shouldMoveRestaurantList: true
     });
   };
 
   turnOffMoveRestaurantList = (): void => {
     this.setState({
-      shouldMoveRestaurantList: false,
+      shouldMoveRestaurantList: false
     });
   };
 
@@ -139,17 +139,17 @@ class NearYouContainer extends Component<Props, State> {
   handleGetUserLocation = (persistedUserLocation: Array<any>): void => {
     let userLocation;
 
-    if (typeof persistedUserLocation[0] === 'string') {
+    if (typeof persistedUserLocation[0] === "string") {
       const { latitude, longitude } = JSON.parse(persistedUserLocation);
 
       userLocation = {
         latitude: parseFloat(latitude),
-        longitude: parseFloat(longitude),
+        longitude: parseFloat(longitude)
       };
     } else {
       userLocation = {
         latitude: persistedUserLocation[0],
-        longitude: persistedUserLocation[1],
+        longitude: persistedUserLocation[1]
       };
     }
 
@@ -169,7 +169,7 @@ class NearYouContainer extends Component<Props, State> {
       shouldMoveRestaurantList,
       indexRestaurantSelected,
       restaurantsCached,
-      userLocation,
+      userLocation
     } = this.state;
     const { nearbyRestaurants } = this.props;
     const { error } = nearbyRestaurants;
@@ -193,13 +193,14 @@ class NearYouContainer extends Component<Props, State> {
   }
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators(NearbyRestaurantsActions, dispatch);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(NearbyRestaurantsActions, dispatch);
 
 const mapStateToProps = state => ({
-  nearbyRestaurants: state.nearbyRestaurants,
+  nearbyRestaurants: state.nearbyRestaurants
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(NearYouContainer);

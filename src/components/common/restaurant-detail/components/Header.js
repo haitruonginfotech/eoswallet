@@ -1,14 +1,14 @@
 // @flow
 
-import React from 'react';
-import { View } from 'react-native';
+import React from "react";
+import { View } from "react-native";
 
-import ProgressiveImage from '~/components/common/ProgressiveImage';
-import styled from 'styled-components';
+import ProgressiveImage from "../../../../components/common/ProgressiveImage";
+import styled from "styled-components";
 
 const Container = styled(View)`
   width: 100%;
-  height: ${({ theme }) => theme.metrics.getHeightFromDP('25%')}px;
+  height: ${({ theme }) => theme.metrics.getHeightFromDP("25%")}px;
 `;
 
 const DarkLayer = styled(View)`
@@ -20,7 +20,7 @@ const DarkLayer = styled(View)`
 
 type Props = {
   thumbnailImageURL: string,
-  imageURL: string,
+  imageURL: string
 };
 
 const HeaderSection = ({ thumbnailImageURL, imageURL }: Props): Object => (

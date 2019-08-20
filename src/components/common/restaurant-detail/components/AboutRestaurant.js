@@ -1,12 +1,12 @@
 // @flow
 
-import React, { Fragment } from 'react';
-import { Text, View } from 'react-native';
+import React, { Fragment } from "react";
+import { Text, View } from "react-native";
 
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import styled from 'styled-components';
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import styled from "styled-components";
 
-import ReviewStars from '~/components/common/ReviewStars';
+import ReviewStars from "../../../../components/common/ReviewStars";
 
 const Container = styled(View)`
   width: 100%;
@@ -18,22 +18,22 @@ const Container = styled(View)`
 `;
 
 const DescriptionText = styled(Text).attrs({
-  ellipsizeMode: 'tail',
-  numberOfLines: 4,
+  ellipsizeMode: "tail",
+  numberOfLines: 4
 })`
   margin-bottom: ${({ theme }) => theme.metrics.largeSize}px;
   margin-top: ${({ theme }) => theme.metrics.largeSize}px;
   color: ${({ theme }) => theme.colors.subText};
-  font-size: ${({ theme }) => theme.metrics.getWidthFromDP('4.5%')};
+  font-size: ${({ theme }) => theme.metrics.getWidthFromDP("4.5%")};
   font-family: CircularStd-Book;
 `;
 
 const DefaultText = styled(Text).attrs({
-  ellipsizeMode: 'tail',
-  numberOfLines: 2,
+  ellipsizeMode: "tail",
+  numberOfLines: 2
 })`
   color: ${({ theme }) => theme.colors.gray};
-  font-size: ${({ theme }) => theme.metrics.getWidthFromDP('4%')};
+  font-size: ${({ theme }) => theme.metrics.getWidthFromDP("4%")};
   font-family: CircularStd-Book;
 `;
 
@@ -45,18 +45,18 @@ const SectionRow = styled(View)`
 `;
 
 const RestaurantName = styled(Text).attrs({
-  ellipsizeMode: 'tail',
-  numberOfLines: 2,
+  ellipsizeMode: "tail",
+  numberOfLines: 2
 })`
   width: 75%;
   color: ${({ theme }) => theme.colors.darkText};
-  font-size: ${({ theme }) => theme.metrics.getWidthFromDP('6%')};
+  font-size: ${({ theme }) => theme.metrics.getWidthFromDP("6%")};
   font-family: CircularStd-Bold;
 `;
 
 const CustomIcon = styled(Icon).attrs(({ name }) => ({
   size: 18,
-  name,
+  name
 }))`
   margin-left: -4px;
   margin-right: ${({ theme }) => theme.metrics.smallSize}px;
@@ -65,7 +65,7 @@ const CustomIcon = styled(Icon).attrs(({ name }) => ({
 
 const getOperatingHoursText = (
   operatingHours: Object,
-  isOpen: boolean,
+  isOpen: boolean
 ): string => {
   const { open, close } = operatingHours;
 
@@ -79,19 +79,15 @@ const getOperatingHoursText = (
 const renderAddressAndOperatingHours = (
   operatingHours: Object,
   address: string,
-  isOpen: boolean,
+  isOpen: boolean
 ): Object => (
   <Fragment>
     <SectionRow>
-      <CustomIcon
-        name="map-marker-outline"
-      />
+      <CustomIcon name="map-marker-outline" />
       <DefaultText>{address}</DefaultText>
     </SectionRow>
     <SectionRow>
-      <CustomIcon
-        name="clock-outline"
-      />
+      <CustomIcon name="clock-outline" />
       <DefaultText>{getOperatingHoursText(operatingHours, isOpen)}</DefaultText>
     </SectionRow>
   </Fragment>
@@ -103,7 +99,7 @@ type Props = {
   isOpen: boolean,
   address: string,
   stars: number,
-  name: string,
+  name: string
 };
 
 const AboutRestaurant = ({
@@ -112,13 +108,11 @@ const AboutRestaurant = ({
   address,
   isOpen,
   stars,
-  name,
+  name
 }: Props) => (
   <Container>
     <RestaurantName>{name}</RestaurantName>
-    <ReviewStars
-      stars={stars}
-    />
+    <ReviewStars stars={stars} />
     {renderAddressAndOperatingHours(operatingHours, address, isOpen)}
     <DescriptionText>{description}</DescriptionText>
   </Container>

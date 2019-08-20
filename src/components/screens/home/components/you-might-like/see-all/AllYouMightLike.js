@@ -1,13 +1,13 @@
 // @flow
 
-import React, { Fragment } from 'react';
-import { FlatList } from 'react-native';
+import React, { Fragment } from "react";
+import { FlatList } from "react-native";
 
-import styled from 'styled-components';
+import styled from "styled-components";
 
-import YouMightLikeSeeAllItemList from './YouMightLikeSeeAllItemList';
-import { Alert, TYPES } from '~/components/common/alert';
-import Loading from '~/components/common/Loading';
+import YouMightLikeSeeAllItemList from "./YouMightLikeSeeAllItemList";
+import { Alert, TYPES } from "../../../../../../components/common/alert";
+import Loading from "../../../../../../components/common/Loading";
 
 const List = styled(FlatList)`
   flex: 1;
@@ -18,26 +18,22 @@ type Props = {
   isDishesEmpty: boolean,
   dishes: Array<Object>,
   loading: boolean,
-  error: boolean,
+  error: boolean
 };
 
 const AllYouMightLike = ({
   isDishesEmpty,
   loading,
   dishes,
-  error,
+  error
 }: Props): Object => {
   const shouldRenderContent = !isDishesEmpty && !loading && !error;
 
   return (
     <Fragment>
       {loading && <Loading />}
-      {error && <Alert
-        type={TYPES.ERROR_SERVER_CONNECTION}
-      />}
-      {isDishesEmpty && <Alert
-        type={TYPES.YOU_MIGHT_LIKE_EMPTY}
-      />}
+      {error && <Alert type={TYPES.ERROR_SERVER_CONNECTION} />}
+      {isDishesEmpty && <Alert type={TYPES.YOU_MIGHT_LIKE_EMPTY} />}
       {shouldRenderContent && (
         <List
           renderItem={({ item, index }) => (

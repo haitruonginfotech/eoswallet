@@ -1,18 +1,19 @@
-import { createStackNavigator } from 'react-navigation';
+import { createStackNavigator } from "react-navigation";
 
-import { setDefaultHeaderLayout } from '~/routes/headerUtils';
+import { setDefaultHeaderLayout } from "../../../routes/headerUtils";
 
-import Settings from './index';
+import Settings from "./index";
 
 export const ROUTE_NAMES = {
-  SETTINGS: 'SETTINGS',
+  SETTINGS: "SETTINGS"
 };
 
 const ROUTES = createStackNavigator({
   [ROUTE_NAMES.SETTINGS]: {
     screen: Settings,
-    navigationOptions: ({ navigation }) => setDefaultHeaderLayout(navigation, 'Settings'),
-  },
+    navigationOptions: ({ navigation }) =>
+      setDefaultHeaderLayout(navigation, "Settings")
+  }
 });
 
 export default ROUTES;

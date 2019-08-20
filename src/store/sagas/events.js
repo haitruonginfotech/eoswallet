@@ -1,11 +1,11 @@
-import { call, put } from 'redux-saga/effects';
+import { call, put } from "redux-saga/effects";
 
-import { Creators as EventsActions } from '~/store/ducks/events';
-import api from '~/services/api';
+import { Creators as EventsActions } from "../../store/ducks/events";
+import api from "../../services/api";
 
 export function* requestAllEvents() {
   try {
-    const { data } = yield call(api.get, '/event');
+    const { data } = yield call(api.get, "/event");
 
     yield put(EventsActions.requestAllEventsSuccess(data));
   } catch (err) {
@@ -22,8 +22,8 @@ export function* requestEventDetails(action) {
     yield put(
       EventsActions.requestEventDetailsSuccess({
         restaurants: data.restaurants,
-        details: data.event,
-      }),
+        details: data.event
+      })
     );
   } catch (err) {
     yield put(EventsActions.requestEventDetailsFailure());

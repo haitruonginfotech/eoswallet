@@ -1,11 +1,11 @@
 // @flow
 
-import React, { Fragment } from 'react';
-import { View, Text } from 'react-native';
-import styled from 'styled-components';
+import React, { Fragment } from "react";
+import { View, Text } from "react-native";
+import styled from "styled-components";
 
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import appStyle from '~/styles';
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import appStyle from "../../styles";
 
 const Wrapper = styled(View)`
   flex-direction: row;
@@ -17,7 +17,7 @@ const Reviews = styled(Text)`
   color: ${({ theme, textColor }) => theme.colors[textColor]};
   font-family: CircularStd-Book;
   font-size: ${({ theme, isSmall }) => {
-    const percentage = isSmall ? '3.5%' : '4%';
+    const percentage = isSmall ? "3.5%" : "4%";
     return theme.metrics.getWidthFromDP(percentage);
   }};
 `;
@@ -35,27 +35,15 @@ const getStars = (stars: number, isSmall: boolean): Array<Object> => {
   const iconSize = isSmall ? 12 : 16;
 
   const FullStar = (
-    <Icon
-      color={appStyle.colors.yellow}
-      name="star"
-      size={iconSize}
-    />
+    <Icon color={appStyle.colors.yellow} name="star" size={iconSize} />
   );
 
   const HalfStar = (
-    <Icon
-      color={appStyle.colors.yellow}
-      name="star-half"
-      size={iconSize}
-    />
+    <Icon color={appStyle.colors.yellow} name="star-half" size={iconSize} />
   );
 
   const EmptyStar = (
-    <Icon
-      color={appStyle.colors.yellow}
-      name="star-outline"
-      size={iconSize}
-    />
+    <Icon color={appStyle.colors.yellow} name="star-outline" size={iconSize} />
   );
 
   let currentStars = stars;
@@ -90,11 +78,7 @@ const renderStars = (grade: number, isSmall: boolean): Object => {
   return (
     <WrapperStars>
       {starsFromGrade.map(star => (
-        <Fragment
-          key={Math.random()}
-        >
-          {star}
-        </Fragment>
+        <Fragment key={Math.random()}>{star}</Fragment>
       ))}
     </WrapperStars>
   );
@@ -105,7 +89,7 @@ type Props = {
   textColor: ?string,
   isSmall: boolean,
   reviews: ?number,
-  stars: number,
+  stars: number
 };
 
 const ReviewStars = ({
@@ -113,16 +97,13 @@ const ReviewStars = ({
   textColor,
   isSmall,
   reviews,
-  stars,
+  stars
 }: Props) => (
   <Wrapper>
     {renderStars(stars, isSmall)}
     {shouldShowReviewsText && !!reviews && (
-      <Reviews
-        textColor={textColor}
-        isSmall={isSmall}
-      >
-        {`${reviews} ${reviews > 1 ? 'Reviews' : 'Review'}`}
+      <Reviews textColor={textColor} isSmall={isSmall}>
+        {`${reviews} ${reviews > 1 ? "Reviews" : "Review"}`}
       </Reviews>
     )}
   </Wrapper>

@@ -1,35 +1,36 @@
 // @flow
 
-import React, { Component } from 'react';
-import { View, StyleSheet, Animated } from 'react-native';
-import styled from 'styled-components';
+import React, { Component } from "react";
+import { View, StyleSheet, Animated } from "react-native";
+import styled from "styled-components";
 
-import appStyles from '~/styles';
+import appStyles from "../../styles";
 
 const ForegroundLayer = styled(View)`
   background-color: ${({ theme }) => theme.colors.progressiveImageForeground};
-  border-radius: ${({ theme, withBorder }) => (withBorder ? theme.metrics.borderRadius : 0)}px;
+  border-radius: ${({ theme, withBorder }) =>
+    withBorder ? theme.metrics.borderRadius : 0}px;
 `;
 
 const styles = StyleSheet.create({
   container: {
-    height: '100%',
-    width: '100%',
+    height: "100%",
+    width: "100%"
   },
 
   imageOverlay: {
     bottom: 0,
     left: 0,
-    position: 'absolute',
+    position: "absolute",
     right: 0,
-    top: 0,
-  },
+    top: 0
+  }
 });
 
 type Props = {
   thumbnailImageURL: string,
   withBorder: ?boolean,
-  imageURL: string,
+  imageURL: string
 };
 
 class ProgressiveImage extends Component<Props, {}> {
@@ -38,13 +39,13 @@ class ProgressiveImage extends Component<Props, {}> {
 
   onThumbnailLoaded = () => {
     Animated.timing(this._thumbnailOpacity, {
-      toValue: 1,
+      toValue: 1
     }).start();
   };
 
   onImageLoaded = () => {
     Animated.timing(this._imageOpacity, {
-      toValue: 1,
+      toValue: 1
     }).start();
   };
 
@@ -52,16 +53,14 @@ class ProgressiveImage extends Component<Props, {}> {
     const { thumbnailImageURL, withBorder, imageURL } = this.props;
 
     return (
-      <ForegroundLayer
-        withBorder={withBorder}
-      >
+      <ForegroundLayer withBorder={withBorder}>
         <Animated.Image
           style={[
             styles.container,
             {
               borderRadius: withBorder ? appStyles.metrics.borderRadius : 0,
-              opacity: this._thumbnailOpacity,
-            },
+              opacity: this._thumbnailOpacity
+            }
           ]}
           source={{ uri: thumbnailImageURL }}
           onLoad={this.onThumbnailLoaded}
@@ -73,9 +72,9 @@ class ProgressiveImage extends Component<Props, {}> {
             styles.imageOverlay,
             {
               borderRadius: withBorder ? appStyles.metrics.borderRadius : 0,
-              opacity: this._imageOpacity,
+              opacity: this._imageOpacity
             },
-            styles.container,
+            styles.container
           ]}
           onLoad={this.onImageLoaded}
           source={{ uri: imageURL }}

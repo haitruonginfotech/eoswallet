@@ -1,12 +1,12 @@
 // @flow
 
-import React, { Component } from 'react';
-import { View, FlatList } from 'react-native';
+import React, { Component } from "react";
+import { View, FlatList } from "react-native";
 
-import styled from 'styled-components';
-import appStyles from '~/styles';
+import styled from "styled-components";
+import appStyles from "../../../../../styles";
 
-import RestaurantItemList from './RestaurantItemList';
+import RestaurantItemList from "./RestaurantItemList";
 
 const ListWrapper = styled(View)`
   flex: 1;
@@ -18,7 +18,7 @@ type Props = {
   shouldMoveRestaurantList: boolean,
   indexRestaurantSelected: number,
   restaurants: Array<Object>,
-  onSelectMarker: Function,
+  onSelectMarker: Function
 };
 
 const ITEM_LIST_WIDTH = appStyles.metrics.width;
@@ -30,7 +30,7 @@ class RestaurantList extends Component<Props, {}> {
     const {
       turnOffMoveRestaurantList,
       shouldMoveRestaurantList,
-      indexRestaurantSelected,
+      indexRestaurantSelected
     } = this.props;
 
     if (shouldMoveRestaurantList) {
@@ -81,7 +81,7 @@ class RestaurantList extends Component<Props, {}> {
           getItemLayout={(data, index) => ({
             length: ITEM_LIST_WIDTH,
             offset: ITEM_LIST_WIDTH * index,
-            index,
+            index
           })}
           ref={(ref: any): void => {
             this._restaurantListRef = ref;

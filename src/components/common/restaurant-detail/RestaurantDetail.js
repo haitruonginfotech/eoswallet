@@ -1,24 +1,22 @@
 // @flow
 
-import React, { Component, Fragment } from 'react';
-import {
-  StatusBar, FlatList, Animated, View,
-} from 'react-native';
+import React, { Component, Fragment } from "react";
+import { StatusBar, FlatList, Animated, View } from "react-native";
 
-import { withNavigation } from 'react-navigation';
-import styled from 'styled-components';
+import { withNavigation } from "react-navigation";
+import styled from "styled-components";
 
-import FloatinActionButton from '~/components/common/FloatingActionButton';
-import { Alert, TYPES } from '~/components/common/alert';
-import CustomTab from '~/components/common/CustomTab';
-import Loading from '~/components/common/Loading';
+import FloatinActionButton from "../../../components/common/FloatingActionButton";
+import { Alert, TYPES } from "../../../components/common/alert";
+import CustomTab from "../../../components/common/CustomTab";
+import Loading from "../../../components/common/Loading";
 
-import AboutRestaurant from './components/AboutRestaurant';
-import MenuListItem from './components/MenuListItem';
-import Header from './components/Header';
+import AboutRestaurant from "./components/AboutRestaurant";
+import MenuListItem from "./components/MenuListItem";
+import Header from "./components/Header";
 
-import CONSTANTS from '~/utils/CONSTANTS';
-import appStyles from '~/styles';
+import CONSTANTS from "../../../utils/CONSTANTS";
+import appStyles from "../../../styles";
 
 const Container = styled(View)`
   flex: 1;
@@ -34,7 +32,7 @@ const FloatingActionButtonWrapper = styled(View)`
   width: 100%;
   align-items: flex-end;
   position: absolute;
-  margin-top: ${({ theme }) => theme.metrics.getHeightFromDP('25%') - 28}px;
+  margin-top: ${({ theme }) => theme.metrics.getHeightFromDP("25%") - 28}px;
   padding-right: ${({ theme }) => theme.metrics.largeSize}px;
 `;
 
@@ -43,11 +41,11 @@ type Props = {
   navigation: Function,
   loading: boolean,
   error: boolean,
-  data: Object,
+  data: Object
 };
 
 type State = {
-  indexMenuSelected: number,
+  indexMenuSelected: number
 };
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
@@ -59,7 +57,7 @@ class RestaurantDetail extends Component<Props, State> {
   _dishesListWidth = 0;
 
   state = {
-    indexMenuSelected: 0,
+    indexMenuSelected: 0
   };
 
   onChangeMenuIndex = (indexSelected: number): void => {
@@ -73,20 +71,20 @@ class RestaurantDetail extends Component<Props, State> {
       Animated.timing(this._animatedFlatlistPosition, {
         toValue: this._dishesListWidth,
         duration: 150,
-        useNativeDriver: true,
+        useNativeDriver: true
       }),
 
       Animated.timing(this._animatedFlatlistOpacity, {
         toValue: 1,
         duration: 150,
-        useNativeDriver: true,
+        useNativeDriver: true
       }),
 
       Animated.spring(this._animatedFlatlistPosition, {
         toValue: 0,
         bounciness: 6,
-        useNativeDriver: true,
-      }),
+        useNativeDriver: true
+      })
     ]);
 
     this.animateDishesListToFirstIndex();
@@ -94,13 +92,13 @@ class RestaurantDetail extends Component<Props, State> {
     Animated.timing(this._animatedFlatlistOpacity, {
       toValue: 0,
       duration: 150,
-      useNativeDriver: true,
+      useNativeDriver: true
     }).start(() => {
       this.setState(
         {
-          indexMenuSelected: indexSelected,
+          indexMenuSelected: indexSelected
         },
-        () => animationAppearCombo.start(),
+        () => animationAppearCombo.start()
       );
     });
   };
@@ -108,18 +106,15 @@ class RestaurantDetail extends Component<Props, State> {
   animateDishesListToFirstIndex = (): void => {
     this._dishesListRef.getNode().scrollToIndex({
       animated: true,
-      index: 0,
+      index: 0
     });
   };
 
   renderHeaderSection = (
     imageURL: string,
-    thumbnailImageURL: string,
+    thumbnailImageURL: string
   ): Object => (
-    <Header
-      thumbnailImageURL={thumbnailImageURL}
-      imageURL={imageURL}
-    />
+    <Header thumbnailImageURL={thumbnailImageURL} imageURL={imageURL} />
   );
 
   renderAboutRestaurantSection = (restaurantInfo: Object) => (
@@ -130,33 +125,32 @@ class RestaurantDetail extends Component<Props, State> {
   );
 
   renderFloatingActionButton = (restaurant: Object, userLocation: Object) => {
-    const {
-      distance, location, isOpen, name,
-    } = restaurant;
+    const { distance, location, isOpen, name } = restaurant;
 
     const { navigation } = this.props;
 
     const mapParams = {
       restaurantLocation: {
-        id: 'restaurant_location',
+        id: "restaurant_location",
         latitude: location.coordinates[0],
-        longitude: location.coordinates[1],
+        longitude: location.coordinates[1]
       },
       userLocation: {
         ...userLocation,
-        id: 'user_location',
+        id: "user_location"
       },
       status: isOpen,
-      distance,
+      distance
     };
 
     return (
       <FloatingActionButtonWrapper>
         <FloatinActionButton
-          action={() => navigation.navigate(CONSTANTS.ROUTE_RESTAURANT_ADDRESS_MAP, {
-            [CONSTANTS.NAVIGATION_PARAM_USER_LOCATION]: mapParams,
-            [CONSTANTS.NAVIGATION_PARAM_RESTAURANT_NAME]: name,
-          })
+          action={() =>
+            navigation.navigate(CONSTANTS.ROUTE_RESTAURANT_ADDRESS_MAP, {
+              [CONSTANTS.NAVIGATION_PARAM_USER_LOCATION]: mapParams,
+              [CONSTANTS.NAVIGATION_PARAM_RESTAURANT_NAME]: name
+            })
           }
           name="map-outline"
           color="primaryColor"
@@ -170,7 +164,7 @@ class RestaurantDetail extends Component<Props, State> {
 
     const tabMenu = menu.map(item => ({
       title: item.type,
-      id: item.type,
+      id: item.type
     }));
 
     const menuData = menu.map(item => item.dishes);
@@ -189,15 +183,15 @@ class RestaurantDetail extends Component<Props, State> {
               {
                 translateX: this._animatedFlatlistPosition.interpolate({
                   inputRange: [0, 1],
-                  outputRange: [0, 1],
-                }),
-              },
+                  outputRange: [0, 1]
+                })
+              }
             ],
             marginLeft: this._animatedFlatlistPosition._value,
             paddingVertical: appStyles.metrics.smallSize,
-            opacity: this._animatedFlatlistOpacity,
+            opacity: this._animatedFlatlistOpacity
           }}
-          ref={(ref) => {
+          ref={ref => {
             this._dishesListRef = ref;
           }}
           renderItem={({ item }) => (
@@ -226,32 +220,28 @@ class RestaurantDetail extends Component<Props, State> {
   };
 
   render() {
-    const {
-      userLocation, loading, error, data,
-    } = this.props;
+    const { userLocation, loading, error, data } = this.props;
 
-    const shouldShowContent = !loading && !error && Object.keys(data).length === 2;
+    const shouldShowContent =
+      !loading && !error && Object.keys(data).length === 2;
 
     return (
       <Container>
         <StatusBar
           backgroundColor="transparent"
-          barStyle={error || loading ? 'dark-content' : 'light-content'}
+          barStyle={error || loading ? "dark-content" : "light-content"}
           translucent
           animated
         />
         {loading && <Loading />}
         {error && (
-          <Alert
-            type={TYPES.ERROR_SERVER_CONNECTION}
-            withExtraTopPadding
-          />
+          <Alert type={TYPES.ERROR_SERVER_CONNECTION} withExtraTopPadding />
         )}
         {shouldShowContent && (
           <Fragment>
             {this.renderHeaderSection(
               data.restaurant.imageURL,
-              data.restaurant.thumbnailImageURL,
+              data.restaurant.thumbnailImageURL
             )}
             {this.renderAboutRestaurantSection(data.restaurant)}
             {this.renderFloatingActionButton(data.restaurant, userLocation)}

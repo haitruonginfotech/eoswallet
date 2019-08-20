@@ -1,20 +1,18 @@
 // @flow
 
-import React from 'react';
-import {
-  StatusBar, Platform, Text, View,
-} from 'react-native';
+import React from "react";
+import { StatusBar, Platform, Text, View } from "react-native";
 
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import MapView, { Marker } from 'react-native-maps';
-import styled from 'styled-components';
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import MapView, { Marker } from "react-native-maps";
+import styled from "styled-components";
 
-import FloatinActionButton from '~/components/common/FloatingActionButton';
+import FloatinActionButton from "../../../../components/common/FloatingActionButton";
 
-import CONSTANTS from '~/utils/CONSTANTS';
-import appStyles from '~/styles';
+import CONSTANTS from "../../../../utils/CONSTANTS";
+import appStyles from "../../../../styles";
 
-const mapHeight = appStyles.metrics.getHeightFromDP('75%');
+const mapHeight = appStyles.metrics.getHeightFromDP("75%");
 
 const Container = styled(View)`
   flex: 1;
@@ -41,12 +39,12 @@ const FooterContainer = styled(View)`
 `;
 
 const StatusText = styled(Text).attrs({
-  ellipsizeMode: 'tail',
-  numberOfLines: 2,
+  ellipsizeMode: "tail",
+  numberOfLines: 2
 })`
   color: ${({ theme }) => theme.colors.darkText};
   font-size: ${({ theme }) => {
-    const percentage = Platform.OS === 'android' ? '5%' : '4.5%';
+    const percentage = Platform.OS === "android" ? "5%" : "4.5%";
     return theme.metrics.getWidthFromDP(percentage);
   }}px;
   font-family: CircularStd-Black;
@@ -55,13 +53,13 @@ const StatusText = styled(Text).attrs({
 const EstablishmentStatus = styled(Text)`
   color: ${({ theme }) => theme.colors.darkLayer};
   padding-top: ${({ theme }) => theme.metrics.extraSmallSize}px;
-  font-size: ${({ theme }) => theme.metrics.getWidthFromDP('4%')}px;
+  font-size: ${({ theme }) => theme.metrics.getWidthFromDP("4%")}px;
   font-family: CircularStd-Medium;
 `;
 
 const MarkerIcon = styled(Icon).attrs(({ name }) => ({
   size: 28,
-  name,
+  name
 }))`
   color: ${({ theme }) => theme.colors.primaryColor};
 `;
@@ -71,14 +69,14 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const INITIAL_REGION = {
   latitude: -3.7900894,
-  longitude: -38.6590335,
+  longitude: -38.6590335
 };
 
 const edgePadding = {
   top: 50,
   right: 50,
   bottom: 50,
-  left: 50,
+  left: 50
 };
 
 let _restaurantMarkerRef: Object;
@@ -88,7 +86,7 @@ let _mapRef: Object;
 const onFitMapCoordinates = (markers: Array<Object>): void => {
   _mapRef.fitToCoordinates(markers, {
     animated: true,
-    edgePadding,
+    edgePadding
   });
 };
 
@@ -96,14 +94,14 @@ const renderMap = (restaurantName: string, markers: Array<Object>): Object => (
   <MapContainer>
     <MapView
       onMapReady={() => onFitMapCoordinates(markers)}
-      style={{ width: '100%', height: '100%' }}
+      style={{ width: "100%", height: "100%" }}
       initialRegion={{
         latitude: INITIAL_REGION.latitude,
         longitude: INITIAL_REGION.longitude,
         latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA
       }}
-      ref={(ref) => {
+      ref={ref => {
         _mapRef = ref;
       }}
       showsPointsOfInterest={false}
@@ -114,18 +112,19 @@ const renderMap = (restaurantName: string, markers: Array<Object>): Object => (
     >
       {markers.map(marker => (
         <Marker
-          title={marker.id === 'user_location' ? "You're here" : restaurantName}
-          ref={(markerRef) => {
-            if (marker.id === 'user_location') {
+          title={marker.id === "user_location" ? "You're here" : restaurantName}
+          ref={markerRef => {
+            if (marker.id === "user_location") {
               _userMarkerRef = markerRef;
             } else {
               _restaurantMarkerRef = markerRef;
             }
           }}
           onPress={() => {
-            const ref = marker.id === 'user_location'
-              ? _userMarkerRef
-              : _restaurantMarkerRef;
+            const ref =
+              marker.id === "user_location"
+                ? _userMarkerRef
+                : _restaurantMarkerRef;
 
             ref.showCallout();
           }}
@@ -134,9 +133,9 @@ const renderMap = (restaurantName: string, markers: Array<Object>): Object => (
         >
           <MarkerIcon
             name={
-              marker.id === 'user_location'
-                ? 'account-location'
-                : 'map-marker-radius'
+              marker.id === "user_location"
+                ? "account-location"
+                : "map-marker-radius"
             }
           />
         </Marker>
@@ -146,7 +145,7 @@ const renderMap = (restaurantName: string, markers: Array<Object>): Object => (
 );
 
 const renderFooter = (distance: number, isOpen: boolean): Object => {
-  const status = `${isOpen ? 'Open' : 'Closed'} now`;
+  const status = `${isOpen ? "Open" : "Closed"} now`;
 
   return (
     <FooterContainer>
@@ -169,7 +168,7 @@ const renderFloatingActionButton = (markers: Array<Object>): Object => (
 );
 
 type Props = {
-  navigation: Function,
+  navigation: Function
 };
 
 const RestaurantAddressMap = ({ navigation }: Props): Object => {
@@ -177,12 +176,12 @@ const RestaurantAddressMap = ({ navigation }: Props): Object => {
     restaurantLocation,
     userLocation,
     distance,
-    isOpen,
+    isOpen
   } = navigation.getParam(CONSTANTS.NAVIGATION_PARAM_USER_LOCATION, {});
 
   const restaurantName = navigation.getParam(
     CONSTANTS.NAVIGATION_PARAM_RESTAURANT_NAME,
-    '',
+    ""
   );
 
   const markers = [restaurantLocation, userLocation];

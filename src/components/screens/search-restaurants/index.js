@@ -1,47 +1,48 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { Creators as SearchRestaurantsCreators } from '~/store/ducks/search-restaurants';
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import { Creators as SearchRestaurantsCreators } from "../../../store/ducks/search-restaurants";
 
-import SearchRestaurants from './components';
-import { getItemFromStorage } from '~/utils/AsyncStoarageManager';
-import CONSTANTS from '~/utils/CONSTANTS';
+import SearchRestaurants from "./components";
+import { getItemFromStorage } from "../../../utils/AsyncStoarageManager";
+import CONSTANTS from "../../../utils/CONSTANTS";
 
 type Props = {
   requestSearchRestaurants: Function,
-  searchRestaurants: Object,
+  searchRestaurants: Object
 };
 
 type State = {
-  userLocation: Array<any>,
+  userLocation: Array<any>
 };
 
 class SearchRestaurantsContainer extends Component<Props, State> {
   state = {
-    userLocation: [],
+    userLocation: []
   };
 
   async componentDidMount() {
     const persistedUserLocation = await getItemFromStorage(
       CONSTANTS.USER_LOCATION,
-      [0, 0],
+      [0, 0]
     );
 
-    const userLocation = typeof persistedUserLocation === 'string'
-      ? JSON.parse(persistedUserLocation)
-      : persistedUserLocation;
+    const userLocation =
+      typeof persistedUserLocation === "string"
+        ? JSON.parse(persistedUserLocation)
+        : persistedUserLocation;
 
     this.setState({
-      userLocation,
+      userLocation
     });
   }
 
   onSearchRestaurants = (
     dishesTypes: Array<string>,
-    maxDistance: number,
+    maxDistance: number
   ): void => {
     const { requestSearchRestaurants } = this.props;
     const { userLocation } = this.state;
@@ -61,13 +62,14 @@ class SearchRestaurantsContainer extends Component<Props, State> {
   }
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators(SearchRestaurantsCreators, dispatch);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(SearchRestaurantsCreators, dispatch);
 
 const mapStateToProps = state => ({
-  searchRestaurants: state.searchRestaurants,
+  searchRestaurants: state.searchRestaurants
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(SearchRestaurantsContainer);

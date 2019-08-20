@@ -1,23 +1,23 @@
 // @flow
 
-import React, { Component } from 'react';
-import { StatusBar, FlatList, View } from 'react-native';
+import React, { Component } from "react";
+import { StatusBar, FlatList, View } from "react-native";
 
-import SplashScreen from 'react-native-splash-screen';
-import styled from 'styled-components';
-/*
-import BottomPagination from './components/BottomPagination';
-import GetStartedButton from './components/GetStartedButton';
-import { SCREENS, TYPES } from './components/SCREENS_TYPES';
-import IntroScreen from './components/IntroScreen';
+import SplashScreen from "react-native-splash-screen";
+import styled from "styled-components";
 
-import { ROUTE_NAMES } from '~/routes/index';
-import appStyles from '~/styles';
-*/
+import BottomPagination from "./components/BottomPagination";
+import GetStartedButton from "./components/GetStartedButton";
+import { SCREENS, TYPES } from "./components/SCREENS_TYPES";
+import IntroScreen from "./components/IntroScreen";
+
+import { ROUTE_NAMES } from "../../../routes/index";
+import appStyles from "../../../styles";
+
 const Container = styled(View)`
   flex: 1;
 `;
-/*
+
 const IntroScreenWrapper = styled(View)`
   width: ${({ theme }) => theme.metrics.width}px;
   height: ${({ theme }) => theme.metrics.height}px;
@@ -25,7 +25,7 @@ const IntroScreenWrapper = styled(View)`
 
 const BottomContent = styled(View)`
   width: 100%;
-  margin-top: ${({ theme }) => theme.metrics.getHeightFromDP('85%')}px;
+  margin-top: ${({ theme }) => theme.metrics.getHeightFromDP("85%")}px;
   padding-horizontal: ${({ theme }) => theme.metrics.extraLargeSize}px;
   position: absolute;
 `;
@@ -33,20 +33,20 @@ const BottomContent = styled(View)`
 const PAGES = [
   SCREENS[TYPES.FIND_RESTAURANTS],
   SCREENS[TYPES.WITH_YOUR_TASTE],
-  SCREENS[TYPES.CHOOSE_YOUR_MEAL],
+  SCREENS[TYPES.CHOOSE_YOUR_MEAL]
 ];
-*/
+
 type Props = {
-  navigation: Object,
+  navigation: Object
 };
 
 type State = {
-  currentPageIndex: number,
+  currentPageIndex: number
 };
 
 class OnboardingIntro extends Component<Props, State> {
-  /*state = {
-    currentPageIndex: 0,
+  state = {
+    currentPageIndex: 0
   };
 
   componentDidMount() {
@@ -58,9 +58,9 @@ class OnboardingIntro extends Component<Props, State> {
 
     this.setState(
       {
-        currentPageIndex: currentPageIndex + 1,
+        currentPageIndex: currentPageIndex + 1
       },
-      () => this.onSlidePage(),
+      () => this.onSlidePage()
     );
   };
 
@@ -69,9 +69,9 @@ class OnboardingIntro extends Component<Props, State> {
 
     this.setState(
       {
-        currentPageIndex: currentPageIndex - 1,
+        currentPageIndex: currentPageIndex - 1
       },
-      () => this.onSlidePage(),
+      () => this.onSlidePage()
     );
   };
 
@@ -80,7 +80,7 @@ class OnboardingIntro extends Component<Props, State> {
 
     this._pagesListRef.scrollToIndex({
       animated: true,
-      index: currentPageIndex,
+      index: currentPageIndex
     });
   };
 
@@ -93,7 +93,7 @@ class OnboardingIntro extends Component<Props, State> {
       : 0;
 
     this.setState({
-      currentPageIndex,
+      currentPageIndex
     });
   };
 
@@ -102,9 +102,7 @@ class OnboardingIntro extends Component<Props, State> {
       onMomentumScrollEnd={event => this.onFlatlistMomentumScrollEnd(event)}
       renderItem={({ item }) => (
         <IntroScreenWrapper>
-          <IntroScreen
-            {...item}
-          />
+          <IntroScreen {...item} />
         </IntroScreenWrapper>
       )}
       showsHorizontalScrollIndicator={false}
@@ -137,14 +135,14 @@ class OnboardingIntro extends Component<Props, State> {
         currentIndex={1}
         numberOfDots={3}
       />,
-      <GetStartedButton />,
+      <GetStartedButton />
     ];
 
     const Controller = PAGINATION_CONTROLLERS[currentPageIndex];
 
     return <BottomContent>{Controller}</BottomContent>;
   };
-*/
+
   render() {
     return (
       <Container>
@@ -154,7 +152,8 @@ class OnboardingIntro extends Component<Props, State> {
           translucent
           animated
         />
-        
+        {this.renderPages()}
+        {this.renderPaginationController()}
       </Container>
     );
   }

@@ -1,16 +1,16 @@
 // @flow
 
-import React, { Fragment } from 'react';
-import { StatusBar } from 'react-native';
+import React, { Fragment } from "react";
+import { StatusBar } from "react-native";
 
-import { ThemeProvider } from 'styled-components';
-import { Provider } from 'react-redux';
+import { ThemeProvider } from "styled-components";
+import { Provider } from "react-redux";
 
-//import './config/ReactotronConfig';
+import "./config/ReactotronConfig";
 
-import ApplicationNavigator from './routes';
-import AppTheme from './styles';
-//import store from './store';
+import ApplicationNavigator from "./routes";
+import AppTheme from "./styles";
+import store from "./store";
 
 const App = (): Object => (
   <Fragment>
@@ -20,10 +20,10 @@ const App = (): Object => (
       translucent
       animated
     />
-    <ThemeProvider
-      theme={AppTheme}
-    >
-     
+    <ThemeProvider theme={AppTheme}>
+      <Provider store={store}>
+        <ApplicationNavigator />
+      </Provider>
     </ThemeProvider>
   </Fragment>
 );

@@ -1,27 +1,25 @@
 // @flow
 
-import React from 'react';
-import {
-  TouchableWithoutFeedback, Platform, Text, View,
-} from 'react-native';
+import React from "react";
+import { TouchableWithoutFeedback, Platform, Text, View } from "react-native";
 
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { withNavigation } from 'react-navigation';
-import FastImage from 'react-native-fast-image';
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { withNavigation } from "react-navigation";
+import FastImage from "react-native-fast-image";
 
-import styled from 'styled-components';
+import styled from "styled-components";
 
-import { ROUTE_NAMES } from '~/components/screens/home/routes';
-import ReviewStars from '~/components/common/ReviewStars';
-import FlagPrice from '~/components/common/FlagPrice';
+import { ROUTE_NAMES } from "../../../../../../components/screens/home/routes";
+import ReviewStars from "../../../../../../components/common/ReviewStars";
+import FlagPrice from "../../../../../../components/common/FlagPrice";
 
-import CONSTANTS from '~/utils/CONSTANTS';
-import appStyles from '~/styles';
+import CONSTANTS from "../../../../../../utils/CONSTANTS";
+import appStyles from "../../../../../../styles";
 
 const getTextSize = (type: string): number => {
   const sizes = {
-    title: Platform.OS === 'android' ? '6.5%' : '5%',
-    default: Platform.OS === 'android' ? '5%' : '4.5%',
+    title: Platform.OS === "android" ? "6.5%" : "5%",
+    default: Platform.OS === "android" ? "5%" : "4.5%"
   };
 
   return appStyles.metrics.getWidthFromDP(sizes[type]);
@@ -29,8 +27,9 @@ const getTextSize = (type: string): number => {
 
 const Container = styled(View)`
   width: 100%;
-  height: ${({ theme }) => theme.metrics.getHeightFromDP('25%')}px;
-  margin-bottom: ${({ hasBottomMargin, theme }) => (hasBottomMargin ? theme.metrics.extraSmallSize : 0)}px;
+  height: ${({ theme }) => theme.metrics.getHeightFromDP("25%")}px;
+  margin-bottom: ${({ hasBottomMargin, theme }) =>
+    hasBottomMargin ? theme.metrics.extraSmallSize : 0}px;
 `;
 
 const DarkLayer = styled(View)`
@@ -53,7 +52,7 @@ const DisheImageWrapper = styled(View)`
 
 const DisheImage = styled(FastImage).attrs(({ imageURL }) => ({
   source: { uri: imageURL },
-  resizeMode: 'cover',
+  resizeMode: "cover"
 }))`
   width: 100%;
   height: 100%;
@@ -66,8 +65,8 @@ const TextContentWrapper = styled(View)`
 `;
 
 const DisheTitle = styled(Text).attrs({
-  ellipsizeMode: 'tail',
-  numberOfLines: 1,
+  ellipsizeMode: "tail",
+  numberOfLines: 1
 })`
   width: 100%;
   color: ${({ theme }) => theme.colors.defaultWhite};
@@ -79,18 +78,18 @@ const DistanceWrapper = styled(View)`
   width: 100%;
   flex-direction: row;
   align-items: center;
-  margin-top: ${({ theme }) => theme.metrics.getHeightFromDP('1%')}px;
+  margin-top: ${({ theme }) => theme.metrics.getHeightFromDP("1%")}px;
 `;
 
 const RestaurantDistance = styled(Text)`
   color: ${({ theme }) => theme.colors.defaultWhite};
-  font-size: ${getTextSize('default')}px;
+  font-size: ${getTextSize("default")}px;
   font-family: CircularStd-Medium;
 `;
 
 const MapIcon = styled(Icon).attrs({
-  name: 'map-marker',
-  size: 18,
+  name: "map-marker",
+  size: 18
 })`
   margin-right: ${({ theme }) => theme.metrics.smallSize}px;
   color: ${({ theme }) => theme.colors.defaultWhite};
@@ -104,13 +103,13 @@ type Props = {
   title: string,
   price: number,
   stars: number,
-  id: string,
+  id: string
 };
 
 const renderTextContent = (
   title: string,
   stars: number,
-  reviews: number,
+  reviews: number
 ): Object => (
   <TextContentWrapper>
     <DisheTitle>{title}</DisheTitle>
@@ -137,29 +136,23 @@ const RecommendedSeeAllItemList = ({
   price,
   title,
   stars,
-  id,
+  id
 }: Props): Object => (
   <TouchableWithoutFeedback
     onPress={() => {
       navigation.navigate(ROUTE_NAMES.DISH_DETAIL, {
         [CONSTANTS.NAVIGATION_PARAM_IS_DISH_DETAIL_REVIEW_MODE]: true,
-        [CONSTANTS.NAVIGATION_PARAM_ID]: id,
+        [CONSTANTS.NAVIGATION_PARAM_ID]: id
       });
     }}
   >
-    <Container
-      hasBottomMargin={hasBottomMargin}
-    >
+    <Container hasBottomMargin={hasBottomMargin}>
       <DisheImageWrapper>
-        <DisheImage
-          imageURL={imageURL}
-        />
+        <DisheImage imageURL={imageURL} />
       </DisheImageWrapper>
       <DarkLayer>
         <FlagPriceWrapper>
-          <FlagPrice
-            price={price}
-          />
+          <FlagPrice price={price} />
         </FlagPriceWrapper>
         {renderTextContent(title, stars, reviews)}
       </DarkLayer>

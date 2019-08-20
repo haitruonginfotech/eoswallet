@@ -1,19 +1,19 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { Creators as DishCreators } from '~/store/ducks/dish';
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import { Creators as DishCreators } from "../../../store/ducks/dish";
 
-import { handleHiddenHeaderStyle } from '~/routes/headerUtils';
-import DishDetail from './components/DishDetail';
-import CONSTANTS from '~/utils/CONSTANTS';
+import { handleHiddenHeaderStyle } from "../../../routes/headerUtils";
+import DishDetail from "./components/DishDetail";
+import CONSTANTS from "../../../utils/CONSTANTS";
 
 type Props = {
   requestDishDetail: Function,
   navigation: Object,
-  dish: Object,
+  dish: Object
 };
 
 class DishDetailContainer extends Component<Props, {}> {
@@ -22,9 +22,11 @@ class DishDetailContainer extends Component<Props, {}> {
   componentDidMount() {
     const { requestDishDetail, navigation } = this.props;
 
-    const id = navigation.getParam(CONSTANTS.NAVIGATION_PARAM_ID, '');
+    const id = navigation.getParam(CONSTANTS.NAVIGATION_PARAM_ID, "");
 
-    this._subscriptionWillFocusEvent = navigation.addListener('willFocus', () => handleHiddenHeaderStyle(navigation, false, false));
+    this._subscriptionWillFocusEvent = navigation.addListener("willFocus", () =>
+      handleHiddenHeaderStyle(navigation, false, false)
+    );
 
     requestDishDetail(id);
   }
@@ -43,19 +45,18 @@ class DishDetailContainer extends Component<Props, {}> {
   render() {
     const { dish } = this.props;
 
-    return <DishDetail
-      {...dish}
-    />;
+    return <DishDetail {...dish} />;
   }
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators(DishCreators, dispatch);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(DishCreators, dispatch);
 
 const mapStateToProps = state => ({
-  dish: state.dish,
+  dish: state.dish
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(DishDetailContainer);

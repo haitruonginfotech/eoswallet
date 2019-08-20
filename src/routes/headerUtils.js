@@ -1,54 +1,54 @@
 // @flow
 
-import { Platform, StatusBar } from 'react-native';
+import { Platform, StatusBar } from "react-native";
 
-import CONSTANTS from '~/utils/CONSTANTS';
-import appStyles from '~/styles';
+import CONSTANTS from "../utils/CONSTANTS";
+import appStyles from "../styles";
 
 const hiddenProps = {
   [CONSTANTS.NAVIGATION_PARAM_HEADER_HAS_DATA_STYLE]: {
     headerTransparent: true,
     headerStyle: {
-      backgroundColor: 'transparent',
-      borderBottomWidth: 0,
-    },
+      backgroundColor: "transparent",
+      borderBottomWidth: 0
+    }
   },
   [CONSTANTS.NAVIGATION_PARAM_HEADER_LOADING_STYLE]: {
     headerTintColor: appStyles.colors.primaryColor,
     headerTransparent: true,
     headerStyle: {
-      backgroundColor: 'transparent',
-      borderBottomWidth: 0,
-    },
-  },
+      backgroundColor: "transparent",
+      borderBottomWidth: 0
+    }
+  }
 };
 
 export const handleHiddenHeaderStyle = (
   navigation: Object,
   loading: boolean,
-  error: boolean,
+  error: boolean
 ): void => {
   const hasLoadingHeaderStyleParam = navigation.getParam(
     CONSTANTS.NAVIGATION_PARAM_HEADER_LOADING_STYLE,
-    false,
+    false
   );
 
   const hasHasDataHeaderStyleParam = navigation.getParam(
     CONSTANTS.NAVIGATION_PARAM_HEADER_HAS_DATA_STYLE,
-    false,
+    false
   );
 
   if (!hasLoadingHeaderStyleParam && loading) {
     navigation.setParams({
       [CONSTANTS.NAVIGATION_PARAM_HEADER_LOADING_STYLE]: true,
-      [CONSTANTS.NAVIGATION_PARAM_HEADER_HAS_DATA_STYLE]: false,
+      [CONSTANTS.NAVIGATION_PARAM_HEADER_HAS_DATA_STYLE]: false
     });
   }
 
   if (!hasHasDataHeaderStyleParam && !loading && !error) {
     navigation.setParams({
       [CONSTANTS.NAVIGATION_PARAM_HEADER_HAS_DATA_STYLE]: true,
-      [CONSTANTS.NAVIGATION_PARAM_HEADER_LOADING_STYLE]: false,
+      [CONSTANTS.NAVIGATION_PARAM_HEADER_LOADING_STYLE]: false
     });
   }
 };
@@ -60,9 +60,9 @@ const getHiddenProps = (navigation: Object): Object => {
     headerTintColor: appStyles.colors.primaryColor,
     headerTransparent: true,
     headerStyle: {
-      backgroundColor: 'transparent',
-      borderBottomWidth: 0,
-    },
+      backgroundColor: "transparent",
+      borderBottomWidth: 0
+    }
   };
 
   if (!!params && params[CONSTANTS.NAVIGATION_PARAM_HEADER_LOADING_STYLE]) {
@@ -86,40 +86,40 @@ export const setHiddenHeaderLayout = (navigation: Object): Object => {
     ...Platform.select({
       android: {
         headerStyle: {
-          marginTop: StatusBar.currentHeight,
-        },
-      },
-    }),
+          marginTop: StatusBar.currentHeight
+        }
+      }
+    })
   };
 };
 
 export const setDefaultHeaderLayout = (
   navigation: Object,
   title: string,
-  fontFamily: string = 'CircularStd-Medium',
-  fontSize: ?number,
+  fontFamily: string = "CircularStd-Medium",
+  fontSize: ?number
 ): Object => ({
   title,
   headerTitleStyle: {
     fontSize: fontSize || appStyles.metrics.navigationHeaderFontSize,
     color: appStyles.colors.defaultWhite,
     fontWeight: undefined,
-    fontFamily,
+    fontFamily
   },
   headerTintColor: appStyles.colors.defaultWhite,
   headerStyle: {
     backgroundColor: appStyles.colors.primaryColor,
-    borderBottomWidth: 0,
+    borderBottomWidth: 0
   },
   ...Platform.select({
     android: {
       headerStyle: {
         backgroundColor: appStyles.colors.primaryColor,
-        elevation: title === 'Near You' ? 0 : 4,
-        marginTop: StatusBar.currentHeight,
-      },
-    },
+        elevation: title === "Near You" ? 0 : 4,
+        marginTop: StatusBar.currentHeight
+      }
+    }
   }),
   headerBackTitle: null,
-  borderBottomWidth: 0,
+  borderBottomWidth: 0
 });

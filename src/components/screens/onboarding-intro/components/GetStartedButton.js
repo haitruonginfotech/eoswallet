@@ -1,12 +1,12 @@
 // @flow
 
-import React from 'react';
-import { TouchableOpacity, Text, View } from 'react-native';
+import React from "react";
+import { TouchableOpacity, Text, View } from "react-native";
 
-import { withNavigation } from 'react-navigation';
-import styled from 'styled-components';
+import { withNavigation } from "react-navigation";
+import styled from "styled-components";
 
-import { ROUTE_NAMES } from '~/routes/index';
+import { ROUTE_NAMES } from "../../../../routes/index";
 
 const ButtonWrapper = styled(View)`
   width: 100%;
@@ -15,13 +15,13 @@ const ButtonWrapper = styled(View)`
 `;
 
 const Button = styled(TouchableOpacity)`
-  height: ${({ theme }) => theme.metrics.getHeightFromDP('6%')}px;
+  height: ${({ theme }) => theme.metrics.getHeightFromDP("6%")}px;
   justify-content: center;
   align-items;
-  padding-vertical: ${({ theme }) => theme.metrics.getWidthFromDP('3%')}px;
-  padding-horizontal: ${({ theme }) => theme.metrics.getWidthFromDP('7%')}px;
+  padding-vertical: ${({ theme }) => theme.metrics.getWidthFromDP("3%")}px;
+  padding-horizontal: ${({ theme }) => theme.metrics.getWidthFromDP("7%")}px;
   background-color: ${({ theme }) => theme.colors.primaryColor};
-  border-radius: ${({ theme }) => theme.metrics.getHeightFromDP('6%') / 2}px;
+  border-radius: ${({ theme }) => theme.metrics.getHeightFromDP("6%") / 2}px;
 `;
 
 const ButtonText = styled(Text)`
@@ -31,14 +31,12 @@ const ButtonText = styled(Text)`
 `;
 
 type Props = {
-  navigation: Object,
+  navigation: Object
 };
 
 const GetStartedButton = ({ navigation }: Props): Object => (
   <ButtonWrapper>
-    <Button
-      onPress={() => navigation.navigate(ROUTE_NAMES.LOGIN)}
-    >
+    <Button onPress={() => navigation.navigate(ROUTE_NAMES.LOGIN)}>
       <ButtonText>GET STARTED</ButtonText>
     </Button>
   </ButtonWrapper>

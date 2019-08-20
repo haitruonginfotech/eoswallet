@@ -1,7 +1,7 @@
-import { call, put } from 'redux-saga/effects';
+import { call, put } from "redux-saga/effects";
 
-import { Creators as RestaurantActions } from '~/store/ducks/restaurant';
-import api from '~/services/api';
+import { Creators as RestaurantActions } from "../../store/ducks/restaurant";
+import api from "../../services/api";
 
 export function* requestRestaurantDetail(action) {
   try {
@@ -9,7 +9,7 @@ export function* requestRestaurantDetail(action) {
 
     const headers = {
       userLatitude: userLocation.latitude,
-      userLongitude: userLocation.longitude,
+      userLongitude: userLocation.longitude
     };
 
     const response = yield call(api.get, `/restaurant/${id}`, { headers });

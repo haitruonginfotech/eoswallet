@@ -1,29 +1,28 @@
 // @flow
 
-import React, { Component, Fragment } from 'react';
-import {
-  TouchableWithoutFeedback, Image, Text, View,
-} from 'react-native';
+import React, { Component, Fragment } from "react";
+import { TouchableWithoutFeedback, Image, Text, View } from "react-native";
 
-import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
-import { withNavigation } from 'react-navigation';
+import ShimmerPlaceHolder from "react-native-shimmer-placeholder";
+import { withNavigation } from "react-navigation";
 
-import styled from 'styled-components';
+import styled from "styled-components";
 
-import { ROUTE_NAMES } from '~/components/screens/home/routes';
-import CONSTANTS from '~/utils/CONSTANTS';
+import { ROUTE_NAMES } from "../../../../../../components/screens/home/routes";
+import CONSTANTS from "../../../../../../utils/CONSTANTS";
 
 const Container = styled(View)`
-  height: ${({ theme }) => theme.metrics.getHeightFromDP('20%')}px;
-  width: ${({ theme }) => theme.metrics.getWidthFromDP('70%')}px;
-  margin-left: ${({ theme, isFirst }) => (isFirst ? theme.metrics.largeSize : 0)}px;
+  height: ${({ theme }) => theme.metrics.getHeightFromDP("20%")}px;
+  width: ${({ theme }) => theme.metrics.getWidthFromDP("70%")}px;
+  margin-left: ${({ theme, isFirst }) =>
+    isFirst ? theme.metrics.largeSize : 0}px;
   margin-right: ${({ theme }) => theme.metrics.smallSize}
   border-radius: ${({ theme }) => theme.metrics.borderRadius};
 `;
 
 const ImageShimmerOverlay = styled(ShimmerPlaceHolder).attrs({
   visible: false,
-  autoRun: true,
+  autoRun: true
 })`
   height: 100%;
   width: 100%;
@@ -40,20 +39,20 @@ const DarkLayer = styled(View)`
 
 const EventTitle = styled(Text)`
   color: ${({ theme }) => theme.colors.defaultWhite};
-  font-size: ${({ theme }) => theme.metrics.getWidthFromDP('4.5%')};
-  padding-bottom: ${({ theme }) => theme.metrics.getWidthFromDP('1%')};
+  font-size: ${({ theme }) => theme.metrics.getWidthFromDP("4.5%")};
+  padding-bottom: ${({ theme }) => theme.metrics.getWidthFromDP("1%")};
   font-family: CircularStd-Black;
 `;
 
 const EventDescription = styled(Text)`
   color: ${({ theme }) => theme.colors.defaultWhite};
-  font-size: ${({ theme }) => theme.metrics.getWidthFromDP('4%')}px;
+  font-size: ${({ theme }) => theme.metrics.getWidthFromDP("4%")}px;
   font-family: CircularStd-Medium;
   text-align: center;
 `;
 
 const EventImage = styled(Image).attrs(({ imageURL }) => ({
-  source: { uri: imageURL },
+  source: { uri: imageURL }
 }))`
   width: 100%;
   height: 100%;
@@ -67,7 +66,7 @@ const AboutEventWrapper = styled(View)`
   width: 100%;
   height: 100%;
   position: absolute;
-  padding: ${({ theme }) => theme.metrics.getWidthFromDP('4%')}px;
+  padding: ${({ theme }) => theme.metrics.getWidthFromDP("4%")}px;
 `;
 
 type Props = {
@@ -76,21 +75,21 @@ type Props = {
   imageURL: string,
   isFirst: boolean,
   title: string,
-  id: string,
+  id: string
 };
 
 type State = {
-  isImageLoaded: boolean,
+  isImageLoaded: boolean
 };
 
 class InYourCityListItem extends Component<Props, State> {
   state = {
-    isImageLoaded: false,
+    isImageLoaded: false
   };
 
   onLoadImage = (): void => {
     this.setState({
-      isImageLoaded: true,
+      isImageLoaded: true
     });
   };
 
@@ -101,20 +100,19 @@ class InYourCityListItem extends Component<Props, State> {
       title,
       isFirst,
       navigation,
-      id,
+      id
     } = this.props;
 
     const { isImageLoaded } = this.state;
 
     return (
       <Fragment>
-        <Container
-          isFirst={isFirst}
-        >
+        <Container isFirst={isFirst}>
           <TouchableWithoutFeedback
-            onPress={() => navigation.navigate(ROUTE_NAMES.EVENT_DETAILS, {
-              [CONSTANTS.NAVIGATION_PARAM_ID]: id,
-            })
+            onPress={() =>
+              navigation.navigate(ROUTE_NAMES.EVENT_DETAILS, {
+                [CONSTANTS.NAVIGATION_PARAM_ID]: id
+              })
             }
             disabled={!isImageLoaded}
           >

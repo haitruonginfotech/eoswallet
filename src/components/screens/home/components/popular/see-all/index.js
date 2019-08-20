@@ -1,16 +1,16 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { Creators as DishCreators } from '~/store/ducks/dish';
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import { Creators as DishCreators } from "../../../../../../store/ducks/dish";
 
-import SeeAllPopular from './SeeAllPopular';
+import SeeAllPopular from "./SeeAllPopular";
 
 type Props = {
   requestAllDishes: Function,
-  dish: Object,
+  dish: Object
 };
 
 class SeeAllPopularContainer extends Component<Props, {}> {
@@ -23,19 +23,18 @@ class SeeAllPopularContainer extends Component<Props, {}> {
   render() {
     const { dish } = this.props;
 
-    return <SeeAllPopular
-      {...dish}
-    />;
+    return <SeeAllPopular {...dish} />;
   }
 }
 
 const mapStateToProps = state => ({
-  dish: state.dish,
+  dish: state.dish
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators(DishCreators, dispatch);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(DishCreators, dispatch);
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(SeeAllPopularContainer);

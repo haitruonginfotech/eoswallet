@@ -1,16 +1,16 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { Creators as EventCreators } from '~/store/ducks/events';
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import { Creators as EventCreators } from "../../../../../../store/ducks/events";
 
-import InYourCityAllEventsList from './InYourCityAllEventsList';
+import InYourCityAllEventsList from "./InYourCityAllEventsList";
 
 type Props = {
   requestAllEvents: Function,
-  events: Object,
+  events: Object
 };
 
 class AllEventsContainer extends Component<Props, {}> {
@@ -23,19 +23,18 @@ class AllEventsContainer extends Component<Props, {}> {
   render() {
     const { events } = this.props;
 
-    return <InYourCityAllEventsList
-      {...events}
-    />;
+    return <InYourCityAllEventsList {...events} />;
   }
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators(EventCreators, dispatch);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(EventCreators, dispatch);
 
 const mapStateToProps = state => ({
-  events: state.events,
+  events: state.events
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(AllEventsContainer);

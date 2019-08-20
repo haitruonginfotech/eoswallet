@@ -1,22 +1,22 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
   TouchableOpacity,
   Animated,
   FlatList,
   Platform,
   Text,
-  View,
-} from 'react-native';
+  View
+} from "react-native";
 
-import styled from 'styled-components';
-import appStyles from '~/styles';
+import styled from "styled-components";
+import appStyles from "../../styles";
 
 const Container = styled(View)`
   width: 100%;
   height: ${({ theme }) => {
-    const percentage = Platform.OS === 'android' ? '8%' : '7%';
+    const percentage = Platform.OS === "android" ? "8%" : "7%";
     return theme.metrics.getHeightFromDP(percentage);
   }};
   flex-direction: row;
@@ -40,7 +40,7 @@ const Cell = styled(TouchableOpacity)`
 `;
 
 const MarkerWrapper = styled(Animated.View)`
-  height: ${({ theme }) => theme.metrics.getHeightFromDP('0.5%')};
+  height: ${({ theme }) => theme.metrics.getHeightFromDP("0.5%")};
   width: ${({ width }) => width}px;
   background-color: transparent;
   align-self: flex-end;
@@ -56,7 +56,7 @@ const Marker = styled(View)`
 const OptionText = styled(Text)`
   color: ${({ color }) => color}
   font-size: ${({ theme }) => {
-    const percentage = Platform.OS === 'android' ? '4.5%' : '4%';
+    const percentage = Platform.OS === "android" ? "4.5%" : "4%";
     return theme.metrics.getWidthFromDP(percentage);
   }}px;
   font-family: CircularStd-Medium;
@@ -66,13 +66,13 @@ type Props = {
   onChangeMenuIndex: Function,
   contentWidth: number,
   data: Array<Object>,
-  theme: string,
+  theme: string
 };
 
 type State = {
   itemSelectedIndex: number,
   clickTimestamp: number,
-  cellWidth: number,
+  cellWidth: number
 };
 
 class CustomTab extends Component<Props, State> {
@@ -82,14 +82,14 @@ class CustomTab extends Component<Props, State> {
   state = {
     itemSelectedIndex: 0,
     clickTimestamp: 0,
-    cellWidth: 0,
+    cellWidth: 0
   };
 
   componentDidMount() {
     const cellWidth = this.getCellWidth();
 
     this.setState({
-      cellWidth,
+      cellWidth
     });
   }
 
@@ -114,7 +114,7 @@ class CustomTab extends Component<Props, State> {
 
     this.setState({
       itemSelectedIndex: newIndexSelected,
-      clickTimestamp: Date.now(),
+      clickTimestamp: Date.now()
     });
   };
 
@@ -130,14 +130,15 @@ class CustomTab extends Component<Props, State> {
 
     this._flatListRef.scrollToIndex({
       animated: true,
-      index: indexSelected - 1,
+      index: indexSelected - 1
     });
   };
 
   getCellWidth = (): number => {
     const { data, contentWidth } = this.props;
     const datasetLength = data.length;
-    const cellWidth = datasetLength >= 3 ? contentWidth / 3 : contentWidth / datasetLength;
+    const cellWidth =
+      datasetLength >= 3 ? contentWidth / 3 : contentWidth / datasetLength;
 
     return cellWidth;
   };
@@ -146,9 +147,10 @@ class CustomTab extends Component<Props, State> {
     const { itemSelectedIndex, cellWidth } = this.state;
     const { data } = this.props;
 
-    const shouldNotRenderMarker = itemSelectedIndex > 0
-      && itemSelectedIndex < data.length - 1
-      && (newIndexSelected > 0 && newIndexSelected < data.length - 1);
+    const shouldNotRenderMarker =
+      itemSelectedIndex > 0 &&
+      itemSelectedIndex < data.length - 1 &&
+      (newIndexSelected > 0 && newIndexSelected < data.length - 1);
 
     if (shouldNotRenderMarker) {
       return;
@@ -175,7 +177,7 @@ class CustomTab extends Component<Props, State> {
     Animated.timing(this._markerPaddingLeft, {
       toValue: newMarkerMargin,
       duration: 200,
-      useNativeDriver: true,
+      useNativeDriver: true
     }).start();
   };
 
@@ -185,20 +187,20 @@ class CustomTab extends Component<Props, State> {
         markerColor: appStyles.colors.red,
         cellColor: appStyles.colors.defaultWhite,
         activeTextColor: appStyles.colors.red,
-        inactiveTextoColor: appStyles.colors.subText,
+        inactiveTextoColor: appStyles.colors.subText
       },
       gray: {
         markerColor: appStyles.colors.red,
         cellColor: appStyles.colors.lightGray,
         activeTextColor: appStyles.colors.red,
-        inactiveTextoColor: appStyles.colors.subText,
+        inactiveTextoColor: appStyles.colors.subText
       },
       red: {
         markerColor: appStyles.colors.defaultWhite,
         cellColor: appStyles.colors.red,
         activeTextColor: appStyles.colors.defaultWhite,
-        inactiveTextoColor: appStyles.colors.subText,
-      },
+        inactiveTextoColor: appStyles.colors.subText
+      }
     };
 
     return themes[themeSelected];
@@ -216,7 +218,7 @@ class CustomTab extends Component<Props, State> {
   renderList = (
     cellColor: string,
     activeTextColor: string,
-    inactiveTextoColor: string,
+    inactiveTextoColor: string
   ): Object => {
     const { itemSelectedIndex, cellWidth } = this.state;
     const { data } = this.props;
@@ -224,7 +226,7 @@ class CustomTab extends Component<Props, State> {
     return (
       <ListWrapper>
         <FlatList
-          ref={(ref) => {
+          ref={ref => {
             this._flatListRef = ref;
           }}
           showsHorizontalScrollIndicator={false}
@@ -269,10 +271,10 @@ class CustomTab extends Component<Props, State> {
             {
               translateX: this._markerPaddingLeft.interpolate({
                 inputRange: [0, 1],
-                outputRange: [0, 1],
-              }),
-            },
-          ],
+                outputRange: [0, 1]
+              })
+            }
+          ]
         }}
       >
         <Marker
@@ -291,13 +293,11 @@ class CustomTab extends Component<Props, State> {
       inactiveTextoColor,
       activeTextColor,
       markerColor,
-      cellColor,
+      cellColor
     } = this.getThemeColors(theme);
 
     return (
-      <Container
-        color={cellColor}
-      >
+      <Container color={cellColor}>
         {this.renderList(cellColor, activeTextColor, inactiveTextoColor)}
         {this.renderMarker(markerColor)}
       </Container>

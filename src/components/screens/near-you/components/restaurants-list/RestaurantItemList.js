@@ -1,21 +1,19 @@
 // @flow
 
-import React, { Fragment } from 'react';
-import {
-  TouchableOpacity, Platform, View, Text,
-} from 'react-native';
+import React, { Fragment } from "react";
+import { TouchableOpacity, Platform, View, Text } from "react-native";
 
-import { withNavigation } from 'react-navigation';
-import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
-import styled from 'styled-components';
+import { withNavigation } from "react-navigation";
+import Icons from "react-native-vector-icons/MaterialCommunityIcons";
+import styled from "styled-components";
 
-import ReviewStars from '~/components/common/ReviewStars';
-import CONSTANTS from '~/utils/CONSTANTS';
-import appStyles from '~/styles';
+import ReviewStars from "../../../../../components/common/ReviewStars";
+import CONSTANTS from "../../../../../utils/CONSTANTS";
+import appStyles from "../../../../../styles";
 
 const Container = styled(View)`
-  width: ${({ theme }) => theme.metrics.getWidthFromDP('82%')}px;
-  margin-horizontal: ${({ theme }) => theme.metrics.getWidthFromDP('9%')}px;
+  width: ${({ theme }) => theme.metrics.getWidthFromDP("82%")}px;
+  margin-horizontal: ${({ theme }) => theme.metrics.getWidthFromDP("9%")}px;
   align-self: flex-end;
 `;
 
@@ -53,7 +51,7 @@ const DistanceWrapper = styled(View)`
 const DistanceText = styled(Text)`
   color: ${({ theme }) => theme.colors.darkText}
   font-size: ${({ theme }) => {
-    const percentage = Platform.OS === 'ios' ? '4%' : '4.3%';
+    const percentage = Platform.OS === "ios" ? "4%" : "4.3%";
     return theme.metrics.getWidthFromDP(percentage);
   }}px;
   font-family: CircularStd-Medium;
@@ -63,7 +61,7 @@ const DistanceText = styled(Text)`
 const RestaurantDescriptionText = styled(Text)`
   color: ${({ theme }) => theme.colors.subText};
   font-size: ${({ theme }) => {
-    const percentage = Platform.OS === 'ios' ? '4%' : '4.3%';
+    const percentage = Platform.OS === "ios" ? "4%" : "4.3%";
     return theme.metrics.getWidthFromDP(percentage);
   }}px;
   font-family: CircularStd-Medium;
@@ -78,38 +76,34 @@ const RestaurantDescriptionWrapper = styled(View)`
 const RestaurantStatus = styled(Text)`
   color: ${({ color }) => color};
   font-size: ${({ theme }) => {
-    const percentage = Platform.OS === 'ios' ? '4%' : '4.3%';
+    const percentage = Platform.OS === "ios" ? "4%" : "4.3%";
     return theme.metrics.getWidthFromDP(percentage);
   }}px;
   font-family: CircularStd-Medium;
 `;
 
-const Icon = styled(Icons).attrs(({
-  color, theme, name, size,
-}) => ({
+const Icon = styled(Icons).attrs(({ color, theme, name, size }) => ({
   color: theme.colors[color],
   name,
-  size,
+  size
 }))``;
 
 const renderRestaurantStatus = (isOpen: boolean): Object => {
   const restaurantStatus = {
     open: {
       color: appStyles.colors.green,
-      text: 'Open now',
+      text: "Open now"
     },
     closed: {
       color: appStyles.colors.red,
-      text: 'Closed now',
-    },
+      text: "Closed now"
+    }
   };
 
-  const status = isOpen ? 'open' : 'closed';
+  const status = isOpen ? "open" : "closed";
 
   return (
-    <RestaurantStatus
-      color={restaurantStatus[status].color}
-    >
+    <RestaurantStatus color={restaurantStatus[status].color}>
       {restaurantStatus[status].text}
     </RestaurantStatus>
   );
@@ -117,21 +111,14 @@ const renderRestaurantStatus = (isOpen: boolean): Object => {
 
 const renderDistanceContent = (distance: number): Object => (
   <DistanceWrapper>
-    <Icon
-      color={appStyles.colors.primaryColor}
-      name="directions"
-      size={22}
-    />
+    <Icon color={appStyles.colors.primaryColor} name="directions" size={22} />
     <DistanceText>{`${distance} km`}</DistanceText>
   </DistanceWrapper>
 );
 
 const renderTopRowContent = (stars: number, distance: number): Object => (
   <TopRowContentWrapper>
-    <ReviewStars
-      textColor="darkText"
-      stars={stars}
-    />
+    <ReviewStars textColor="darkText" stars={stars} />
     {renderDistanceContent(distance)}
   </TopRowContentWrapper>
 );
@@ -139,21 +126,18 @@ const renderTopRowContent = (stars: number, distance: number): Object => (
 const renderBottomRowContent = (
   navigation: Function,
   isOpen: boolean,
-  id: string,
+  id: string
 ): Object => (
   <BottomRowContentWrapper>
     {renderRestaurantStatus(isOpen)}
     <TouchableOpacity
-      onPress={() => navigation.navigate(CONSTANTS.ROUTE_RESTAURANT_DETAIL, {
-        [CONSTANTS.NAVIGATION_PARAM_ID]: id,
-      })
+      onPress={() =>
+        navigation.navigate(CONSTANTS.ROUTE_RESTAURANT_DETAIL, {
+          [CONSTANTS.NAVIGATION_PARAM_ID]: id
+        })
       }
     >
-      <Icon
-        color={appStyles.colors.darkText}
-        name="arrow-right"
-        size={28}
-      />
+      <Icon color={appStyles.colors.darkText} name="arrow-right" size={28} />
     </TouchableOpacity>
   </BottomRowContentWrapper>
 );
@@ -164,7 +148,7 @@ type Props = {
   distance: number,
   isOpen: boolean,
   stars: number,
-  id: string,
+  id: string
 };
 
 const RestaurantItemList = ({
@@ -173,7 +157,7 @@ const RestaurantItemList = ({
   distance,
   isOpen,
   stars,
-  id,
+  id
 }: Props): Object => (
   <Container>
     <Card
@@ -183,21 +167,21 @@ const RestaurantItemList = ({
             elevation: 1,
             shadowOffset: {
               width: 0,
-              height: 0,
+              height: 0
             },
             shadowRadius: 3,
-            shadowOpacity: 0.35,
+            shadowOpacity: 0.35
           },
           android: {
             elevation: 4,
             shadowOffset: {
               width: 1,
-              height: -3,
+              height: -3
             },
             shadowRadius: 2,
-            shadowOpacity: 5.0,
-          },
-        }),
+            shadowOpacity: 5.0
+          }
+        })
       }}
     >
       <Fragment>
