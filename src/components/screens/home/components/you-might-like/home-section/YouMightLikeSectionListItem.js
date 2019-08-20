@@ -1,31 +1,30 @@
 // @flow
 
-import React, { Component } from 'react';
-import {
-  TouchableWithoutFeedback, Image, Text, View,
-} from 'react-native';
+import React, { Component } from "react";
+import { TouchableWithoutFeedback, Image, Text, View } from "react-native";
 
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import ShimmerPlaceholder from 'react-native-shimmer-placeholder';
-import { withNavigation } from 'react-navigation';
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import ShimmerPlaceholder from "react-native-shimmer-placeholder";
+import { withNavigation } from "react-navigation";
 
-import styled from 'styled-components';
+import styled from "styled-components";
 
-import { ROUTE_NAMES } from '~/components/screens/home/routes';
-import ReviewStars from '~/components/common/ReviewStars';
-import FlagPrice from '~/components/common/FlagPrice';
-import CONSTANTS from '~/utils/CONSTANTS';
+import { ROUTE_NAMES } from "../../../../../../components/screens/home/routes";
+import ReviewStars from "../../../../../../components/common/ReviewStars";
+import FlagPrice from "../../../../../../components/common/FlagPrice";
+import CONSTANTS from "../../../../../../utils/CONSTANTS";
 
 const Container = styled(View)`
-  width: ${({ theme }) => theme.metrics.getWidthFromDP('50%')};
-  height: ${({ theme }) => theme.metrics.getHeightFromDP('25%')};
-  margin-left: ${({ theme, isFirst }) => (isFirst ? theme.metrics.largeSize : 0)}px;
+  width: ${({ theme }) => theme.metrics.getWidthFromDP("50%")};
+  height: ${({ theme }) => theme.metrics.getHeightFromDP("25%")};
+  margin-left: ${({ theme, isFirst }) =>
+    isFirst ? theme.metrics.largeSize : 0}px;
   margin-right: ${({ theme }) => theme.metrics.largeSize}px;
 `;
 
 const ImageShimmerOverlay = styled(ShimmerPlaceholder).attrs({
   visible: false,
-  autoRun: true,
+  autoRun: true
 })`
   width: 100%;
   height: 100%;
@@ -41,10 +40,10 @@ const ContentContainer = styled(View)`
 `;
 
 const DisheImage = styled(Image).attrs(({ imageURL }) => ({
-  source: { uri: imageURL },
+  source: { uri: imageURL }
 }))`
-  width: ${({ theme }) => theme.metrics.getWidthFromDP('50%')};
-  height: ${({ theme }) => theme.metrics.getHeightFromDP('25%')};
+  width: ${({ theme }) => theme.metrics.getWidthFromDP("50%")};
+  height: ${({ theme }) => theme.metrics.getHeightFromDP("25%")};
   border-radius: ${({ theme }) => theme.metrics.borderRadius}px;
   position: absolute;
 `;
@@ -62,17 +61,17 @@ const BottomContentWrapper = styled(View)`
 `;
 
 const DisheTitle = styled(Text).attrs({
-  ellipsizeMode: 'tail',
-  numberOfLines: 1,
+  ellipsizeMode: "tail",
+  numberOfLines: 1
 })`
   color: ${({ theme }) => theme.colors.defaultWhite};
-  font-size: ${({ theme }) => theme.metrics.getWidthFromDP('4.5%')}px;
+  font-size: ${({ theme }) => theme.metrics.getWidthFromDP("4.5%")}px;
   font-family: CircularStd-Black;
 `;
 
 const DistanceWrapper = styled(View)`
   width: 100%;
-  height: ${({ theme }) => theme.metrics.getHeightFromDP('3%')};
+  height: ${({ theme }) => theme.metrics.getHeightFromDP("3%")};
   margin-top: ${({ theme }) => theme.metrics.extraSmallSize}px;
   flex-direction: row;
   align-items: center;
@@ -81,14 +80,14 @@ const DistanceWrapper = styled(View)`
 const DistanceText = styled(Text)`
   padding-left: ${({ theme }) => theme.metrics.extraSmallSize}px;
   color: ${({ theme }) => theme.colors.defaultWhite};
-  font-size: ${({ theme }) => theme.metrics.getWidthFromDP('4%')};
+  font-size: ${({ theme }) => theme.metrics.getWidthFromDP("4%")};
   font-family: CircularStd-Bold;
 `;
 
 const DistanceIcon = styled(Icon).attrs(({ theme }) => ({
   color: theme.colors.defaultWhite,
-  name: 'map-marker',
-  size: 16,
+  name: "map-marker",
+  size: 16
 }))``;
 
 type Props = {
@@ -99,21 +98,21 @@ type Props = {
   price: number,
   stars: number,
   title: string,
-  id: string,
+  id: string
 };
 
 type State = {
-  isDisheImageLoaded: boolean,
+  isDisheImageLoaded: boolean
 };
 
 class YouMightLikeSectionListItem extends Component<Props, State> {
   state = {
-    isDisheImageLoaded: false,
+    isDisheImageLoaded: false
   };
 
   onDisheImageLoaded = () => {
     this.setState({
-      isDisheImageLoaded: true,
+      isDisheImageLoaded: true
     });
   };
 
@@ -122,9 +121,7 @@ class YouMightLikeSectionListItem extends Component<Props, State> {
 
     return (
       <PriceWrapper>
-        <FlagPrice
-          price={price}
-        />
+        <FlagPrice price={price} />
       </PriceWrapper>
     );
   };
@@ -154,14 +151,10 @@ class YouMightLikeSectionListItem extends Component<Props, State> {
 
   render() {
     const { isDisheImageLoaded } = this.state;
-    const {
-      navigation, imageURL, isFirst, id,
-    } = this.props;
+    const { navigation, imageURL, isFirst, id } = this.props;
 
     return (
-      <Container
-        isFirst={isFirst}
-      >
+      <Container isFirst={isFirst}>
         <DisheImage
           onLoad={() => this.onDisheImageLoaded()}
           imageURL={imageURL}
@@ -171,7 +164,7 @@ class YouMightLikeSectionListItem extends Component<Props, State> {
             onPress={() => {
               navigation.navigate(ROUTE_NAMES.DISH_DETAIL, {
                 [CONSTANTS.NAVIGATION_PARAM_IS_DISH_DETAIL_REVIEW_MODE]: true,
-                [CONSTANTS.NAVIGATION_PARAM_ID]: id,
+                [CONSTANTS.NAVIGATION_PARAM_ID]: id
               });
             }}
           >

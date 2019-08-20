@@ -1,17 +1,17 @@
 // @flow
 
-import React, { Fragment } from 'react';
-import { View } from 'react-native';
+import React, { Fragment } from "react";
+import { View } from "react-native";
 
-import styled from 'styled-components';
+import styled from "styled-components";
 
-import { Alert, TYPES } from '~/components/common/alert';
-import CustomTab from '~/components/common/CustomTab';
-import Loading from '~/components/common/Loading';
-import appStyles from '~/styles';
+import { Alert, TYPES } from "../../../../components/common/alert";
+import CustomTab from "../../../../components/common/CustomTab";
+import Loading from "../../../../components/common/Loading";
+import appStyles from "../../../../styles";
 
-import RestaurantsList from './restaurants-list';
-import Map from './map';
+import RestaurantsList from "./restaurants-list";
+import Map from "./map";
 
 const Container = styled(View)`
   flex: 1;
@@ -38,7 +38,7 @@ type Props = {
   onSelectMarker: Function,
   userLocation: Object,
   hasSomeData: boolean,
-  error: boolean,
+  error: boolean
 };
 
 const NearYou = ({
@@ -51,13 +51,11 @@ const NearYou = ({
   userLocation,
   hasSomeData,
   restaurants,
-  error,
+  error
 }: Props): Object => (
   <Container>
     {!hasSomeData && !error && <Loading />}
-    {error && <Alert
-      type={TYPES.ERROR_SERVER_CONNECTION}
-    />}
+    {error && <Alert type={TYPES.ERROR_SERVER_CONNECTION} />}
     {!error && hasSomeData && (
       <Fragment>
         <ContentContainer>

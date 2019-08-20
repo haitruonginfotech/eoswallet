@@ -1,15 +1,15 @@
 // @flow
 
-import React from 'react';
+import React from "react";
 
-import { FlatList, View } from 'react-native';
+import { FlatList, View } from "react-native";
 
-import styled from 'styled-components';
+import styled from "styled-components";
 
-import AllEventsListItem from './AllEventsListItem';
+import AllEventsListItem from "./AllEventsListItem";
 
-import { Alert, TYPES } from '~/components/common/alert';
-import Loading from '~/components/common/Loading';
+import { Alert, TYPES } from "../../../../../../components/common/alert";
+import Loading from "../../../../../../components/common/Loading";
 
 const Container = styled(View)`
   flex: 1;
@@ -19,10 +19,7 @@ const Container = styled(View)`
 const renderList = (events: Array<Object>): Object => (
   <FlatList
     renderItem={({ item, index }) => (
-      <AllEventsListItem
-        isFirst={index === 0}
-        {...item}
-      />
+      <AllEventsListItem isFirst={index === 0} {...item} />
     )}
     showsVerticalScrollIndicator={false}
     keyExtractor={item => item.id}
@@ -33,7 +30,7 @@ const renderList = (events: Array<Object>): Object => (
 type Props = {
   events: Array<Object>,
   loading: boolean,
-  error: boolean,
+  error: boolean
 };
 
 const InYourCityAllEventsList = ({ loading, events, error }: Props): Object => {
@@ -45,12 +42,8 @@ const InYourCityAllEventsList = ({ loading, events, error }: Props): Object => {
   return (
     <Container>
       {loading && <Loading />}
-      {shouldShowBoringCityAlert && <Alert
-        type={TYPES.BORING_CITY}
-      />}
-      {error && <Alert
-        type={TYPES.ERROR_SERVER_CONNECTION}
-      />}
+      {shouldShowBoringCityAlert && <Alert type={TYPES.BORING_CITY} />}
+      {error && <Alert type={TYPES.ERROR_SERVER_CONNECTION} />}
       {shouldShowList && renderList(events)}
     </Container>
   );

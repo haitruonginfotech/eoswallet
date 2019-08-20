@@ -1,14 +1,12 @@
 // @flow
 
-import React from 'react';
-import {
-  TouchableOpacity, Platform, View, Text,
-} from 'react-native';
-import { withNavigation } from 'react-navigation';
+import React from "react";
+import { TouchableOpacity, Platform, View, Text } from "react-native";
+import { withNavigation } from "react-navigation";
 
-import styled from 'styled-components';
+import styled from "styled-components";
 
-import CONSTANTS from '~/utils/CONSTANTS';
+import CONSTANTS from "../../../../utils/CONSTANTS";
 
 const Container = styled(View)`
   width: 100%;
@@ -29,7 +27,7 @@ const Wrapper = styled(TouchableOpacity)`
 const SeeText = styled(Text)`
   color: ${({ theme }) => theme.colors.defaultWhite};
   font-size: ${({ theme }) => {
-    const percentage = Platform.OS === 'android' ? '4%' : '3.8%';
+    const percentage = Platform.OS === "android" ? "4%" : "3.8%";
     return theme.metrics.getWidthFromDP(percentage);
   }};
   font-family: CircularStd-Black;
@@ -37,15 +35,16 @@ const SeeText = styled(Text)`
 
 type Props = {
   restaurantId: string,
-  navigation: Object,
+  navigation: Object
 };
 
 const SeeRestaurantButton = ({ restaurantId, navigation }: Props): Object => (
   <Container>
     <Wrapper
-      onPress={() => navigation.navigate(CONSTANTS.ROUTE_RESTAURANT_DETAIL, {
-        [CONSTANTS.NAVIGATION_PARAM_ID]: restaurantId,
-      })
+      onPress={() =>
+        navigation.navigate(CONSTANTS.ROUTE_RESTAURANT_DETAIL, {
+          [CONSTANTS.NAVIGATION_PARAM_ID]: restaurantId
+        })
       }
     >
       <SeeText>SEE RESTAURANT</SeeText>
