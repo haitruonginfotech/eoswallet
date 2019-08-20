@@ -1,31 +1,32 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import React, { PureComponent } from "react";
 import {
   TouchableWithoutFeedback,
   Animated,
   Easing,
-  Image,
-} from 'react-native';
+  Image
+} from "react-native";
 
-import styled from 'styled-components';
-import appStyles from '~/styles';
+import styled from "styled-components";
+import appStyles from "../../../../../styles";
 
 const Container = styled(Animated.View)`
-  width: ${({ theme }) => theme.metrics.getWidthFromDP('35%')}px;
-  height: ${({ theme }) => theme.metrics.getHeightFromDP('25%')}px;
+  width: ${({ theme }) => theme.metrics.getWidthFromDP("35%")}px;
+  height: ${({ theme }) => theme.metrics.getHeightFromDP("25%")}px;
   justify-content: center;
-  margin-left: ${({ theme, isFirst }) => (isFirst ? `${theme.metrics.mediumSize}px` : 0)};
-  padding-vertical: ${({ theme }) => theme.metrics.getHeightFromDP('1%')}px;
-  padding-horizontal: ${({ theme }) => theme.metrics.getWidthFromDP('1.5%')}px;
+  margin-left: ${({ theme, isFirst }) =>
+    isFirst ? `${theme.metrics.mediumSize}px` : 0};
+  padding-vertical: ${({ theme }) => theme.metrics.getHeightFromDP("1%")}px;
+  padding-horizontal: ${({ theme }) => theme.metrics.getWidthFromDP("1.5%")}px;
   border-radius: 10px;
 `;
 
 const SelectionMarker = styled(Animated.View)`
   justify-content: center;
   align-items: center;
-  padding-vertical: ${({ theme }) => theme.metrics.getHeightFromDP('0.5%')}px;
-  padding-horizontal: ${({ theme }) => theme.metrics.getWidthFromDP('1%')}px;
+  padding-vertical: ${({ theme }) => theme.metrics.getHeightFromDP("0.5%")}px;
+  padding-horizontal: ${({ theme }) => theme.metrics.getWidthFromDP("1%")}px;
   border-radius: 10px;
 `;
 
@@ -37,7 +38,7 @@ const ImageContentContainer = styled(Animated.View)`
 `;
 
 const DisheImage = styled(Image).attrs(({ uri }) => ({
-  source: { uri },
+  source: { uri }
 }))`
   width: 100%;
   height: 100%;
@@ -56,7 +57,7 @@ const DisheTypeSelectButtonWrapper = styled(Animated.View)`
 const DisheTypeText = styled(Animated.Text)`
   color: ${({ theme }) => theme.colors.defaultWhite};
   text-align: center;
-  font-size: ${({ theme }) => theme.metrics.getWidthFromDP('4.8%')}px;
+  font-size: ${({ theme }) => theme.metrics.getWidthFromDP("4.8%")}px;
   font-family: CircularStd-Bold;
 `;
 
@@ -67,11 +68,11 @@ type Props = {
   title: string,
   id: string,
   isItemAlreadySelected: boolean,
-  isFirst: boolean,
+  isFirst: boolean
 };
 
 type State = {
-  isSelected: boolean,
+  isSelected: boolean
 };
 
 class FilterDishesListItem extends PureComponent<Props, State> {
@@ -80,7 +81,7 @@ class FilterDishesListItem extends PureComponent<Props, State> {
   _pressTimestamp = 0;
 
   state = {
-    isSelected: false,
+    isSelected: false
   };
 
   componentDidMount() {
@@ -111,7 +112,7 @@ class FilterDishesListItem extends PureComponent<Props, State> {
     this._pressTimestamp = Date.now();
 
     this.setState({
-      isSelected: !isSelected,
+      isSelected: !isSelected
     });
 
     properCallback(id);
@@ -134,33 +135,33 @@ class FilterDishesListItem extends PureComponent<Props, State> {
       Animated.timing(this._cardScale, {
         toValue: 0.1,
         duration: 100,
-        easing: Easing.ease,
+        easing: Easing.ease
       }),
 
       Animated.timing(this._cardScale, {
         toValue: 0,
         duration: 100,
-        easing: Easing.ease,
+        easing: Easing.ease
       }),
 
       Animated.timing(this._selectorColor, {
         toValue: colorValue,
-        duration: 300,
-      }),
+        duration: 300
+      })
     ]).start();
   };
 
   handleItemAlreadySelected = (): void => {
     const animateItemColor = Animated.timing(this._selectorColor, {
       toValue: 1,
-      duration: 300,
+      duration: 300
     });
 
     this.setState(
       {
-        isSelected: true,
+        isSelected: true
       },
-      () => animateItemColor.start(),
+      () => animateItemColor.start()
     );
   };
 
@@ -168,42 +169,36 @@ class FilterDishesListItem extends PureComponent<Props, State> {
     const { imageURI, isFirst, title } = this.props;
 
     return (
-      <Container
-        isFirst={isFirst}
-      >
+      <Container isFirst={isFirst}>
         <SelectionMarker
           style={{
             backgroundColor: this._selectorColor.interpolate({
               outputRange: [
                 appStyles.colors.white,
-                appStyles.colors.primaryColor,
+                appStyles.colors.primaryColor
               ],
-              inputRange: [0, 1],
+              inputRange: [0, 1]
             }),
             transform: [
               {
                 scaleX: this._cardScale.interpolate({
                   inputRange: [0, 1],
-                  outputRange: [1, 2],
-                }),
+                  outputRange: [1, 2]
+                })
               },
               {
                 scaleY: this._cardScale.interpolate({
                   inputRange: [0, 1],
-                  outputRange: [1, 2],
-                }),
-              },
-            ],
+                  outputRange: [1, 2]
+                })
+              }
+            ]
           }}
         >
           <ImageContentContainer>
-            <DisheImage
-              uri={imageURI}
-            />
+            <DisheImage uri={imageURI} />
           </ImageContentContainer>
-          <TouchableWithoutFeedback
-            onPress={() => this.onSelectItem()}
-          >
+          <TouchableWithoutFeedback onPress={() => this.onSelectItem()}>
             <DisheTypeSelectButtonWrapper>
               <DisheTypeText>{title}</DisheTypeText>
             </DisheTypeSelectButtonWrapper>

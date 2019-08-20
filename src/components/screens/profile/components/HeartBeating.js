@@ -1,11 +1,11 @@
 // @flow
 
-import React, { Component } from 'react';
-import { View, Animated } from 'react-native';
+import React, { Component } from "react";
+import { View, Animated } from "react-native";
 
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import styled from 'styled-components';
-import style from '~/styles';
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import styled from "styled-components";
+import style from "../../../../styles";
 
 const Wrapper = styled(View)`
   align-items: center;
@@ -27,26 +27,26 @@ class HeartBeating extends Component {
       Animated.sequence([
         Animated.timing(this._heartSize, {
           toValue: 30,
-          duration: 100,
+          duration: 100
         }),
 
         Animated.timing(this._heartSize, {
           toValue: 25,
-          duration: 100,
+          duration: 100
         }),
 
         Animated.timing(this._heartSize, {
           toValue: 30,
-          duration: 100,
+          duration: 100
         }),
 
         Animated.timing(this._heartSize, {
           toValue: 25,
-          duration: 200,
+          duration: 200
         }),
 
-        Animated.delay(700),
-      ]),
+        Animated.delay(700)
+      ])
     ).start();
   };
 
@@ -57,7 +57,7 @@ class HeartBeating extends Component {
           name="heart"
           style={{
             fontSize: this._heartSize,
-            color: style.colors.red,
+            color: style.colors.red
           }}
           size={this._heartSize}
         />

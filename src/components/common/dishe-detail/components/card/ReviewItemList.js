@@ -1,18 +1,19 @@
 // @flow
 
-import React from 'react';
-import { Text, View, Platform } from 'react-native';
+import React from "react";
+import { Text, View, Platform } from "react-native";
 
-import FastImage from 'react-native-fast-image';
-import styled from 'styled-components';
+import FastImage from "react-native-fast-image";
+import styled from "styled-components";
 
-import ReviewStars from '~/components/common/ReviewStars';
+import ReviewStars from "../../../../../components/common/ReviewStars";
 
 const Container = styled(View)`
   width: 100%;
-  height: ${({ theme }) => theme.metrics.getHeightFromDP('10%')}px;
+  height: ${({ theme }) => theme.metrics.getHeightFromDP("10%")}px;
   flex-direction: row;
-  margin-top: ${({ theme, isFirst }) => (isFirst ? theme.metrics.mediumSize : 0)}px;
+  margin-top: ${({ theme, isFirst }) =>
+    isFirst ? theme.metrics.mediumSize : 0}px;
   margin-bottom: ${({ theme }) => theme.metrics.mediumSize}px;
 `;
 
@@ -24,11 +25,11 @@ const MainContent = styled(View)`
 `;
 
 const ReviewerName = styled(Text).attrs({
-  ellipsizeMode: 'tail',
-  numberOfLines: 1,
+  ellipsizeMode: "tail",
+  numberOfLines: 1
 })`
   color: ${({ theme }) => theme.colors.darkText};
-  font-size: ${({ theme }) => theme.metrics.getWidthFromDP('3.8%')}px;
+  font-size: ${({ theme }) => theme.metrics.getWidthFromDP("3.8%")}px;
   font-family: CircularStd-Bold;
 `;
 
@@ -40,26 +41,28 @@ const ProfileAvatarWrapper = styled(View)`
 
 const ProfileAvatar = styled(FastImage).attrs(({ uri }) => ({
   priority: FastImage.priority.high,
-  source: { uri },
+  source: { uri }
 }))`
-  margin: ${({ theme }) => `${theme.metrics.largeSize}px 0 ${theme.metrics.largeSize}px 0`}
+  margin: ${({ theme }) =>
+    `${theme.metrics.largeSize}px 0 ${theme.metrics.largeSize}px 0`}
   width: 48px;
   height: 48px;
   border-radius: 24px;
 `;
 
 const ReviewText = styled(Text).attrs({
-  ellipsizeMode: 'tail',
-  numberOfLines: 3,
+  ellipsizeMode: "tail",
+  numberOfLines: 3
 })`
   margin-top: ${({ theme }) => {
-    const marginTop = Platform.OS === 'android'
-      ? theme.metrics.extraSmallSize / 2
-      : theme.metrics.extraSmallSize;
+    const marginTop =
+      Platform.OS === "android"
+        ? theme.metrics.extraSmallSize / 2
+        : theme.metrics.extraSmallSize;
     return marginTop;
   }}px;
   color: ${({ theme }) => theme.colors.subText};
-  font-size: ${({ theme }) => theme.metrics.getWidthFromDP('3.8%')}px;
+  font-size: ${({ theme }) => theme.metrics.getWidthFromDP("3.8%")}px;
   font-family: CircularStd-Book;
 `;
 
@@ -75,28 +78,24 @@ type Props = {
   isFirst: boolean,
   review: string,
   stars: number,
-  name: string,
+  name: string
 };
 
 const renderProfileAvatar = (profileImageURL: string): Object => (
   <ProfileAvatarWrapper>
-    <ProfileAvatar
-      uri={profileImageURL}
-    />
+    <ProfileAvatar uri={profileImageURL} />
   </ProfileAvatarWrapper>
 );
 
 const renderMainContent = (
   name: string,
   review: string,
-  stars: number,
+  stars: number
 ): Object => (
   <MainContent>
     <TopContetWrapper>
       <ReviewerName>{name}</ReviewerName>
-      <ReviewStars
-        stars={stars}
-      />
+      <ReviewStars stars={stars} />
     </TopContetWrapper>
     <ReviewText>{review}</ReviewText>
   </MainContent>
@@ -107,11 +106,9 @@ const ReviewItemList = ({
   isFirst,
   review,
   stars,
-  name,
+  name
 }: Props): Object => (
-  <Container
-    isFirst={isFirst}
-  >
+  <Container isFirst={isFirst}>
     {renderProfileAvatar(profileImageURL)}
     {renderMainContent(name, review, stars)}
   </Container>

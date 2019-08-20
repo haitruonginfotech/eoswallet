@@ -1,16 +1,16 @@
 // @flow
 
-import React, { Component } from 'react';
-import { Animated, FlatList, View } from 'react-native';
+import React, { Component } from "react";
+import { Animated, FlatList, View } from "react-native";
 
-import styled from 'styled-components';
+import styled from "styled-components";
 
-import CustomTab from '~/components/common/CustomTab';
+import CustomTab from "../../../../../components/common/CustomTab";
 
-import IngredientsItemList from './IngredientsItemList';
-import ReviewItemList from './ReviewItemList';
+import IngredientsItemList from "./IngredientsItemList";
+import ReviewItemList from "./ReviewItemList";
 
-import appStyles from '~/styles';
+import appStyles from "../../../../../styles";
 
 const CustomTabWrapper = styled(View)`
   flex: 1;
@@ -21,11 +21,11 @@ const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
 type Props = {
   ingredients: Array<string>,
-  reviews: Array<Object>,
+  reviews: Array<Object>
 };
 
 type State = {
-  tabItemSelected: number,
+  tabItemSelected: number
 };
 
 class Tabs extends Component<Props, State> {
@@ -33,7 +33,7 @@ class Tabs extends Component<Props, State> {
   _flatListHeight = 0;
 
   state = {
-    tabItemSelected: 0,
+    tabItemSelected: 0
   };
 
   onChangeMenuIndex = (index: number): void => {
@@ -41,20 +41,20 @@ class Tabs extends Component<Props, State> {
       Animated.spring(this._animatedFlatlistPosition, {
         toValue: 0,
         bounciness: 8,
-        useNativeDriver: true,
+        useNativeDriver: true
       }).start();
     };
 
     Animated.timing(this._animatedFlatlistPosition, {
       toValue: this._flatListHeight,
       duration: 500,
-      useNativeDriver: true,
+      useNativeDriver: true
     }).start(() => {
       this.setState(
         {
-          tabItemSelected: index,
+          tabItemSelected: index
         },
-        () => onAniamateListAppear(),
+        () => onAniamateListAppear()
       );
     });
   };
@@ -63,10 +63,7 @@ class Tabs extends Component<Props, State> {
     const { tabItemSelected } = this.state;
 
     const IngredientComponent = (
-      <IngredientsItemList
-        isFirst={index === 0}
-        ingredient={item}
-      />
+      <IngredientsItemList isFirst={index === 0} ingredient={item} />
     );
 
     const ReviewComponent = (
@@ -79,7 +76,8 @@ class Tabs extends Component<Props, State> {
       />
     );
 
-    const ProperComponent = tabItemSelected === 0 ? IngredientComponent : ReviewComponent;
+    const ProperComponent =
+      tabItemSelected === 0 ? IngredientComponent : ReviewComponent;
 
     return ProperComponent;
   };
@@ -88,11 +86,12 @@ class Tabs extends Component<Props, State> {
     const { ingredients, reviews } = this.props;
     const { tabItemSelected } = this.state;
 
-    const tabContentWidth = appStyles.metrics.getWidthFromDP('100%')
-      - appStyles.metrics.largeSize * 4;
+    const tabContentWidth =
+      appStyles.metrics.getWidthFromDP("100%") -
+      appStyles.metrics.largeSize * 4;
     const tabItems = [
-      { id: '1', title: 'Ingredients' },
-      { id: '2', title: 'Reviews' },
+      { id: "1", title: "Ingredients" },
+      { id: "2", title: "Reviews" }
     ];
     const dataset = tabItemSelected === 0 ? ingredients : reviews;
 
@@ -112,13 +111,13 @@ class Tabs extends Component<Props, State> {
                 {
                   translateY: this._animatedFlatlistPosition.interpolate({
                     inputRange: [0, 1],
-                    outputRange: [0, 1],
-                  }),
-                },
-              ],
-            },
+                    outputRange: [0, 1]
+                  })
+                }
+              ]
+            }
           ]}
-          keyExtractor={item => (typeof item === 'string' ? item : item.id)}
+          keyExtractor={item => (typeof item === "string" ? item : item.id)}
           renderItem={({ item, index }) => this.renderListItem(item, index)}
           showsVerticalScrollIndicator={false}
           onLayout={(event: Object): void => {

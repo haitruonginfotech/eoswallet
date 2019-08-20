@@ -1,10 +1,10 @@
 // @flow
 
-import React from 'react';
-import { Slider, Text, View } from 'react-native';
-import styled from 'styled-components';
+import React from "react";
+import { Slider, Text, View } from "react-native";
+import styled from "styled-components";
 
-import appStyles from '~/styles';
+import appStyles from "../../../../../styles";
 
 const Container = styled(View)`
   margin-horizontal: ${({ theme }) => theme.metrics.extraLargeSize}px;
@@ -13,7 +13,7 @@ const Container = styled(View)`
 const CurrentDistanceText = styled(Text)`
   color: ${({ theme }) => theme.colors.darkText};
   text-align: center;
-  font-size: ${({ theme }) => theme.metrics.getWidthFromDP('6%')}px;
+  font-size: ${({ theme }) => theme.metrics.getWidthFromDP("6%")}px;
   font-family: CircularStd-Black;
 `;
 
@@ -30,14 +30,14 @@ const DistanceBoundsWrapper = styled(View)`
 
 const DistanceBoundsText = styled(Text)`
   color: ${({ theme }) => theme.colors.darkText};
-  font-size: ${({ theme }) => theme.metrics.getWidthFromDP('4.5%')}px;
+  font-size: ${({ theme }) => theme.metrics.getWidthFromDP("4.5%")}px;
   font-family: CircularStd-Bold;
   text-align: center;
 `;
 
 type Props = {
   onChangeDistance: Function,
-  currentDistance: number,
+  currentDistance: number
 };
 
 let sliderRef: Object;
@@ -51,7 +51,7 @@ const renderDistanceBounds = (): Object => (
 
 const MaxDistanceFilter = ({
   onChangeDistance,
-  currentDistance,
+  currentDistance
 }: Props): Object => (
   <Container>
     <CurrentDistanceWrapper>
@@ -60,7 +60,7 @@ const MaxDistanceFilter = ({
     <Slider
       onLayout={() => sliderRef.setNativeProps({ value: currentDistance })}
       onValueChange={distance => onChangeDistance(distance)}
-      ref={(ref) => {
+      ref={ref => {
         sliderRef = ref;
       }}
       minimumTrackTintColor={appStyles.colors.primaryColor}

@@ -1,11 +1,11 @@
 // @flow
 
-import React from 'react';
-import { Platform, Text, View } from 'react-native';
-import styled from 'styled-components';
+import React from "react";
+import { Platform, Text, View } from "react-native";
+import styled from "styled-components";
 
-import ReviewStars from '~/components/common/ReviewStars';
-import FlagPrice from '~/components/common/FlagPrice';
+import ReviewStars from "../../../../../components/common/ReviewStars";
+import FlagPrice from "../../../../../components/common/FlagPrice";
 
 const ContentWrapper = styled(View)`
   width: 100%;
@@ -24,14 +24,14 @@ const PriceWrapper = styled(View)`
 `;
 
 const DishTitle = styled(Text).attrs({
-  ellipsizeMode: 'tail',
-  numberOfLines: 2,
+  ellipsizeMode: "tail",
+  numberOfLines: 2
 })`
   width: 80%;
   padding-bottom: ${({ theme }) => theme.metrics.extraSmallSize}px;
   color: ${({ theme }) => theme.colors.darkText};
   font-size: ${({ theme }) => {
-    const percentage = Platform.OS === 'android' ? '6.5%' : '6%';
+    const percentage = Platform.OS === "android" ? "6.5%" : "6%";
     return theme.metrics.getWidthFromDP(percentage);
   }};
   font-family: CircularStd-Black;
@@ -41,19 +41,15 @@ type Props = {
   reviews: number,
   price: number,
   stars: number,
-  title: string,
+  title: string
 };
 
-const DishInfo = ({
-  reviews, price, stars, title,
-}: Props) => (
+const DishInfo = ({ reviews, price, stars, title }: Props) => (
   <ContentWrapper>
     <TitleAndPriceWrapper>
       <DishTitle>{title}</DishTitle>
       <PriceWrapper>
-        <FlagPrice
-          price={price}
-        />
+        <FlagPrice price={price} />
       </PriceWrapper>
     </TitleAndPriceWrapper>
     <ReviewStars
