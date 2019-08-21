@@ -1,28 +1,28 @@
 export const TYPES = {
-  FIND_RESTAURANTS: 'FIND_RESTAURANTS',
-  WITH_YOUR_TASTE: 'WITH_YOUR_TASTE',
-  CHOOSE_YOUR_MEAL: 'CHOOSE_YOUR_MEAL',
+  FIND_RESTAURANTS: "FIND_RESTAURANTS",
+  WITH_YOUR_TASTE: "WITH_YOUR_TASTE",
+  CHOOSE_YOUR_MEAL: "CHOOSE_YOUR_MEAL"
 };
 
 export const SCREENS = {
   [TYPES.FIND_RESTAURANTS]: {
-    title: 'FIND RESTAURANTS',
+    title: "EOS WALLET",
     description:
-      'Search for Restaurants near you that fits with the dishes that you desire.',
-    image: 'findrestaurants',
+      "Search for Restaurants near you that fits with the dishes that you desire.",
+    image: "findrestaurants"
   },
 
   [TYPES.WITH_YOUR_TASTE]: {
-    title: 'WITH YOUR TASTE',
+    title: "EOS Wallet of simple and secure wallets",
     description:
-      'You just need to tell what kind of food you are craving, and then we will show you a lot of different options.',
-    image: 'withyourtaste',
+      "Store and manage digital currencies with ease in the smart and beautiful mobile-first cryptocurrency wallets developed by EOS Wallet.",
+    image: "withyourtaste"
   },
 
   [TYPES.CHOOSE_YOUR_MEAL]: {
-    title: 'CHOOSE YOUR MEAL',
+    title: "EOS Wallet: Crypto Wallet",
     description:
-      'Search among hundreds of dishes and pick the right meal for you based on trusted ratings and reviews.',
-    image: 'chooseyourmeal',
-  },
+      "A perfect place to send, store and manage your cryptocurrency portfolio",
+    image: "chooseyourmeal"
+  }
 };
