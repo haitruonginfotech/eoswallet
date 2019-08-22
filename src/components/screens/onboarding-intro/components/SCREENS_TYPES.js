@@ -9,7 +9,7 @@ export const SCREENS = {
     title: "EOS Wallet: Crypto Wallet",
     description:
       "A perfect place to send, store and manage your cryptocurrency portfolio.",
-    image: "findrestaurants"
+    image: "chooseyourmeal"
   },
 
   [TYPES.STEP_TWO]: {
@@ -23,6 +23,6 @@ export const SCREENS = {
     title: "EOS Wallet of simple and secure wallets",
     description:
       "Store and manage digital currencies with ease in the smart and beautiful mobile-first cryptocurrency wallets developed by EOS Wallet.",
-    image: "chooseyourmeal"
+    image: "findrestaurants"
   }
 };

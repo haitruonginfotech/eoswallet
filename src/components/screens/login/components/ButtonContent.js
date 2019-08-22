@@ -10,11 +10,20 @@ import { ContentContainer } from "./Common";
 type Props = {
   navigation: Object,
   children: Object,
-  color: string
+  color: string,
+  onLogin: Function
 };
 
-const ButtonContent = ({ navigation, children, color }: Props): Object => (
-  <TouchableOpacity onPress={() => navigation.navigate(ROUTE_NAMES.MAIN_STACK)}>
+const ButtonContent = ({
+  navigation,
+  children,
+  color,
+  onLogin
+}: Props): Object => (
+  /*<TouchableOpacity onPress={() => navigation.navigate(ROUTE_NAMES.MAIN_STACK)}>
+    <ContentContainer color={color}>{children}</ContentContainer>
+  </TouchableOpacity>*/
+  <TouchableOpacity onPress={() => onLogin()}>
     <ContentContainer color={color}>{children}</ContentContainer>
   </TouchableOpacity>
 );

@@ -50,16 +50,23 @@ const TitleWrapper = styled(View)`
   width: 100%;
   align-items: center;
   justify-content: center;
-  margin-vertical: ${({ theme }) => theme.metrics.getHeightFromDP("8%")}px;
+  margin-vertical: ${({ theme }) => theme.metrics.getHeightFromDP("5%")}px;
 `;
 
 const BackgroundImage = styled(Image).attrs({
-  source: { uri: "login" },
+  source: { uri: "auth" },
   resizeMode: "cover"
 })`
   position: absolute;
   width: 100%;
   height: 100%;
+`;
+
+const LogoImage = styled(Image).attrs({
+  source: { uri: "logodark" }
+})`
+  width: 200px;
+  height: 233px;
 `;
 
 const NavigationTitleWrapper = styled(View)`
@@ -159,7 +166,7 @@ class Login extends Component {
         {isBackgroundImageLoaded && (
           <Wrapper>
             <TitleWrapper>
-              <Title>EOS Wallet</Title>
+              <LogoImage />
             </TitleWrapper>
             <NavigationTitleWrapper>
               <TouchableOpacity onPress={this.onClickLoginButton}>

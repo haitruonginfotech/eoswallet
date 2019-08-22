@@ -1,13 +1,13 @@
 // @flow
 
-import React from 'react';
-import { TextInput, View } from 'react-native';
+import React from "react";
+import { TextInput, View } from "react-native";
 
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import styled from 'styled-components';
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import styled from "styled-components";
 
-import { ContentContainer } from './Common';
-import appStyles from '../../../../styles';
+import { ContentContainer } from "./Common";
+import appStyles from "../../../../styles";
 
 const InputWrapper = styled(View)`
   width: 100%;
@@ -19,7 +19,7 @@ const InputWrapper = styled(View)`
 
 const InputIcon = styled(Icon).attrs(({ iconName }) => ({
   name: iconName,
-  size: 22,
+  size: 22
 }))`
   margin-right: ${({ theme }) => theme.metrics.mediumSize}px;
   color: ${({ theme }) => theme.colors.defaultWhite};
@@ -28,12 +28,12 @@ const InputIcon = styled(Icon).attrs(({ iconName }) => ({
 const CustomInput = styled(TextInput).attrs(({ placeholder, type, theme }) => ({
   placeholderTextColor: theme.colors.transparentGrayx,
   selectionColor: theme.colors.defaultWhite,
-  underlineColorAndroid: 'transparent',
-  secureTextEntry: type === 'password',
-  autoCapitalize: 'none',
+  underlineColorAndroid: "transparent",
+  secureTextEntry: type === "password",
+  autoCapitalize: "none",
   textContentType: type,
   autoCorrect: false,
-  placeholder,
+  placeholder
 }))`
   width: 90%;
   height: 100%;
@@ -45,20 +45,14 @@ type InputProps = {
   placeholder: string,
   iconName: string,
   type: string,
+  name: string
 };
 
 const Input = ({ placeholder, iconName, type }: InputProps): Object => (
-  <ContentContainer
-    color={appStyles.colors.transparentGray}
-  >
+  <ContentContainer color={appStyles.colors.transparentGray}>
     <InputWrapper>
-      <InputIcon
-        iconName={iconName}
-      />
-      <CustomInput
-        placeholder={placeholder}
-        type={type}
-      />
+      <InputIcon iconName={iconName} />
+      <CustomInput placeholder={placeholder} type={type} />
     </InputWrapper>
   </ContentContainer>
 );
