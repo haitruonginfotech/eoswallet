@@ -1,28 +1,28 @@
 export const TYPES = {
-  FIND_RESTAURANTS: "FIND_RESTAURANTS",
-  WITH_YOUR_TASTE: "WITH_YOUR_TASTE",
-  CHOOSE_YOUR_MEAL: "CHOOSE_YOUR_MEAL"
+  STEP_ONE: "STEP_ONE",
+  STEP_TWO: "STEP_TWO",
+  STEP_THREE: "STEP_THREE"
 };
 
 export const SCREENS = {
-  [TYPES.FIND_RESTAURANTS]: {
-    title: "EOS WALLET",
+  [TYPES.STEP_ONE]: {
+    title: "EOS Wallet: Crypto Wallet",
     description:
-      "Search for Restaurants near you that fits with the dishes that you desire.",
+      "A perfect place to send, store and manage your cryptocurrency portfolio.",
     image: "findrestaurants"
   },
 
-  [TYPES.WITH_YOUR_TASTE]: {
-    title: "EOS Wallet of simple and secure wallets",
+  [TYPES.STEP_TWO]: {
+    title: "Why EOS Wallet",
     description:
-      "Store and manage digital currencies with ease in the smart and beautiful mobile-first cryptocurrency wallets developed by EOS Wallet.",
+      "EOS Wallet is a guide to the crypto world created to simplify crypto specifics and make access to coins easier. The EOS Wallet Family includes dedicated wallets for 12 popular cryptocurrencies available on Android and iOS, as well as a Crypto Wallet app with a web interface.",
     image: "withyourtaste"
   },
 
-  [TYPES.CHOOSE_YOUR_MEAL]: {
-    title: "EOS Wallet: Crypto Wallet",
+  [TYPES.STEP_THREE]: {
+    title: "EOS Wallet of simple and secure wallets",
     description:
-      "A perfect place to send, store and manage your cryptocurrency portfolio",
+      "Store and manage digital currencies with ease in the smart and beautiful mobile-first cryptocurrency wallets developed by EOS Wallet.",
     image: "chooseyourmeal"
   }
 };
