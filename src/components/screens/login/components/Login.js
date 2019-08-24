@@ -11,6 +11,7 @@ import { DefaultText } from "./Common";
 import Input from "./Input";
 
 import appStyles from "../../../../styles";
+import api from "../../../../services/api";
 
 const Container = styled(View)`
   width: 100%;
@@ -74,14 +75,38 @@ class LoginComponent extends Component {
     this.state = {
       email: "",
       password: "",
-      token: ""
+      token: {
+        email: true,
+        password: true
+      }
     };
+    this.onLogin = this.onLogin.bind(this);
   }
 
   onLogin() {
     const { email, password, token } = this.state;
     const { navigation } = this.props;
+    if (email == "" || password == "") {
+      this.setState({
+        token: {
+          ...token,
+          email: false,
+          password: false
+        }
+      });
+    } else {
+    }
+    console.log("this email is: " + email);
+    alert("this email is: " + email);
   }
+
+  onChangeInputEmail = text => {
+    this.setState({ email: text });
+  };
+
+  onChangeInputPassword = text => {
+    this.setState({ password: text });
+  };
 
   _emailInputFieldAnimation = new Animated.Value(0);
   _passwordInputFieldAnimation = new Animated.Value(0);
@@ -114,14 +139,18 @@ class LoginComponent extends Component {
     iconName: string,
     type: string,
     style: Object,
-    onChangeTextInput: Function
+    name: string,
+    value: String,
+    onChangeInput: Function
   ): Object => (
     <Input
       placeholder={placeholder}
       iconName={iconName}
       style={style}
       type={type}
-      onChangeTextInput={onChangeTextInput}
+      name={name}
+      value={value}
+      onChangeText={onChangeInput}
     />
   );
 
@@ -172,7 +201,10 @@ class LoginComponent extends Component {
             "Email Address",
             "email-outline",
             "emailAddress",
-            emailAnimationStyle
+            emailAnimationStyle,
+            "email",
+            this.state[name],
+            this.onChangeInputEmail
           )}
         </Animated.View>
         <Animated.View style={passwordAnimationStyle}>
@@ -180,7 +212,10 @@ class LoginComponent extends Component {
             "Password",
             "lock-outline",
             "password",
-            passwordAnimationStyle
+            passwordAnimationStyle,
+            "password",
+            this.state[name],
+            this.onChangeInputPassword
           )}
         </Animated.View>
         <Animated.View style={loginButtonAnimationStyle}>

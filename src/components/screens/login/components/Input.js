@@ -45,14 +45,29 @@ type InputProps = {
   placeholder: string,
   iconName: string,
   type: string,
-  name: string
+  name: string,
+  value: string,
+  onChangeText: Function
 };
 
-const Input = ({ placeholder, iconName, type }: InputProps): Object => (
+const Input = ({
+  placeholder,
+  iconName,
+  type,
+  name,
+  value,
+  onChangeText
+}: InputProps): Object => (
   <ContentContainer color={appStyles.colors.transparentGray}>
     <InputWrapper>
       <InputIcon iconName={iconName} />
-      <CustomInput placeholder={placeholder} type={type} />
+      <CustomInput
+        placeholder={placeholder}
+        type={type}
+        name={name}
+        value={value}
+        onChangeText={onChangeText}
+      />
     </InputWrapper>
   </ContentContainer>
 );
