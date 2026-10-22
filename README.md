@@ -1,0 +1,112 @@
+# WP MCP Tools
+
+WordPress plugin that registers **Abilities API** abilities for content, SCF/ACF fields, media, menus,
+options and theme files, and exposes them as a **dedicated MCP server** through the official
+[WordPress MCP Adapter](https://github.com/WordPress/mcp-adapter). Similar in spirit to `emcp-tools`,
+but with no Elementor dependency: it targets classic/SCF sites.
+
+- Endpoint: `/wp-json/wp-mcp-tools/mcp` (server id `wp-mcp-tools`)
+- MCP tool names: `wpmcp-<tool>`, e.g. `wpmcp-list-posts`, `wpmcp-update-fields`
+- Admin: **MCP Tools** menu → *Connection* (status, auth method, connected apps, per-client setup steps) and *Tools* (group toggles, tool list)
+- Admin bar **MCP** menu (admins only): status dot, Abilities API / MCP Adapter / exposure / active tools / OAuth, **Turn MCP on/off**, link to Connection settings. When MCP is off, the MCP endpoint and OAuth endpoints return 404.
+- Two auth methods, like EMCP Tools: **OAuth 2.1** (browser sign-in + approve, recommended) and **Application Password** (Basic auth header)
+
+## Requirements
+
+- WordPress 6.9+ (Abilities API in core), PHP 7.4+
+- Plugin **MCP Adapter** (tested with 0.6.1) active
+- Optional: Secure Custom Fields / ACF (enables the `fields` group)
+- OAuth: pretty permalinks enabled, and the web server must pass the `Authorization` header to PHP (the default WordPress `.htaccess` does)
+
+## Cài đặt & kết nối (Tiếng Việt)
+
+1. Copy thư mục `wp-mcp-tools` vào `wp-content/plugins/`, kích hoạt **MCP Adapter** trước rồi đến **WP MCP Tools**.
+2. Vào menu **MCP Tools → Connection** và chọn cách xác thực:
+   - **OAuth (khuyên dùng):** không cần copy mật khẩu. Client tự đăng ký, mở một trang trên site để bạn đăng nhập WordPress và bấm **Approve**. Các app đã kết nối hiện trong bảng *Connected apps*, có nút *Sign out* (thu hồi token) và *Remove* (xoá đăng ký).
+   - **Application password:** bấm *Generate application password*; mật khẩu được điền sẵn vào các config bên dưới và chỉ hiện một lần.
+3. Chọn client (Claude Desktop, Claude.ai, Claude Code, Cursor, VS Code, ChatGPT, npx mcp-remote) rồi làm theo các bước và copy config.
+
+Lưu ý với site local (`*.local`, `localhost`, http): Claude.ai, connector của Claude Desktop và ChatGPT chạy trên cloud nên **không gọi được** site local. Hãy dùng Claude Code, Cursor, VS Code hoặc `npx mcp-remote` (config Claude Desktop "Option B"; OAuth chạy qua callback localhost). Cách khác là đưa site ra public HTTPS bằng tunnel và điền **Server URL**.
+
+## OAuth endpoints
+
+| Endpoint | URL |
+|---|---|
+| Protected resource metadata (RFC 9728) | `/.well-known/oauth-protected-resource/wp-json/wp-mcp-tools/mcp` |
+| Authorization server metadata (RFC 8414) | `/.well-known/oauth-authorization-server` |
+| Dynamic client registration (RFC 7591) | `/wpmcp-oauth/register` |
+| Authorize (login + consent, PKCE S256 required) | `/wpmcp-oauth/authorize` |
+| Token (authorization_code, refresh_token with rotation) | `/wpmcp-oauth/token` |
+| Revoke (RFC 7009) | `/wpmcp-oauth/revoke` |
+
+An unauthenticated MCP request gets `401` with `WWW-Authenticate: Bearer resource_metadata="…"`. Access tokens last 1 hour and refresh tokens 30 days. Tokens are stored hashed (SHA-256) in `{prefix}wpmcp_oauth_tokens` and are only accepted on the wp-mcp-tools MCP route.
+
+## Tool groups
+
+| Group | Tools |
+|---|---|
+| site | get-site-info, get-options, update-options, list-plugins, list-themes |
+| content | list-post-types, list-posts, get-post, create-post, update-post, replace-in-post, delete-post, duplicate-post, update-post-meta, list-page-templates, list-revisions, restore-revision |
+| taxonomies | list-taxonomies, list-terms, create-term, update-term, delete-term, set-post-terms |
+| fields (SCF/ACF) | list-field-groups, get-field-group, get-fields, update-fields |
+| media | list-media, get-media, upload-media, **create-upload-session**, **get-upload-session**, **upload-media-chunk**, update-media, delete-media |
+| menus | list-menus, get-menu, create-menu, add-menu-item, update-menu-item, delete-menu-item, assign-menu-location |
+| theme (read) | list-theme-files, read-theme-file, search-theme-files |
+| theme-write | write-theme-file, edit-theme-file, delete-theme-file, list-theme-backups, restore-theme-backup |
+
+## Admin screen (v0.3.1)
+**MCP Tools** (admin menu, plug + spark icon) has two tabs:
+- **Connection**: status cards (MCP server, MCP Adapter, OAuth, tools enabled), the MCP server URL with a copy button, a Settings panel (MCP server switch, OAuth switch, Server URL, minimum capability, authentication method) with a Save button in the header and at the bottom, Application password / Connected apps, step-by-step setup per AI client, and the OAuth debug endpoints.
+- **Tools**: tool groups as switches (with tool counts) and a searchable, filterable list of every tool.
+Styles and script: `assets/admin.css`, `assets/admin.js` (loaded only on this screen). Icon: `WPMCP_Admin::ICON_PATH` (also `assets/icon.svg`).
+
+## Uploading local files (v0.3)
+
+- **Upload link** (`create-upload-session`): returns a secret `upload_url`, valid for 5–60 minutes and limited to N files. It closes after the first successful submit unless `multiple_submits` is true. You can open the link in a browser or in browser automation (e.g. Playwright `setInputFiles('input[name="files[]"]', [...])`) and press **Upload**. You can also POST `multipart/form-data` with `files[]` to `json_endpoint`. Then `get-upload-session` returns the attachment IDs. Files are saved as the user who created the link, and WordPress's allowed file types apply. The link returns 404 when MCP or the Media group is off.
+- **Chunked base64** (`upload-media-chunk`): the first call sends `filename` + `data` and returns an `upload_id`. The next calls send `upload_id` + `data`. The last call sends `done: true`. This suits small files when no browser or HTTP client is available. Partial files live in `uploads/wpmcp-tmp/` (denied by `.htaccess`) and are purged daily.
+- Use `upload-media` with `url` when the file is already on a public URL.
+
+## SCF/ACF value shape
+
+`get-fields` (mode `raw`) and `update-fields` use the same name-keyed shape:
+
+```json
+{
+  "hero_title": "Text",
+  "hero_image": 123,
+  "cta": { "text": "Contact", "url": "https://..." },
+  "features": [ { "title": "Fast", "desc": "..." } ],
+  "sections": [ { "acf_fc_layout": "text_block", "heading": "..." } ]
+}
+```
+
+- Repeater / flexible values **replace** all rows; a sub field missing from a row is cleared.
+- Group values are **merged** (sub fields you omit keep their value).
+- Targets: post ID, `"option"`, `"term_5"`, `"user_1"`.
+
+## Theme file safety
+
+- Only the active theme and its parent (filter `wpmcp_allowed_themes`).
+- `realpath` checks block `..` and symlink escapes; only text extensions can be written.
+- Each write/edit/delete is backed up to `wp-content/wpmcp-backups/<theme>/` (last 20 per file, Apache access denied via `.htaccess`; **on nginx, block this path manually**).
+- PHP is syntax-checked (`token_get_all(TOKEN_PARSE)`), JSON is validated.
+- After a PHP write, the home page is requested; on HTTP 500 / fatal error the change is rolled back automatically.
+- `DISALLOW_FILE_EDIT` disables all write tools. Writes need the `edit_themes` capability.
+
+## Extending
+
+```php
+add_action( 'wpmcp_register_tools', function () {
+    WPMCP_Registry::add( 'content', 'my-tool', array(
+        'label'       => 'My tool',
+        'description' => 'What it does.',
+        'properties'  => array( 'id' => array( 'type' => 'integer' ) ),
+        'required'    => array( 'id' ),
+        'capability'  => 'edit_posts',
+        'readonly'    => true,
+        'callback'    => function ( array $input ) { return array( 'ok' => true ); },
+    ) );
+} );
+```
+
+Filters: `wpmcp_allowed_themes`, `wpmcp_protected_options`.
