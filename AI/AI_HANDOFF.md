@@ -36,6 +36,7 @@ None in progress. Next: push the repo to GitHub, enable Actions, run "Update bun
     - C) MCP switched off: adapter classes not loaded, `/wp-mcp-tools/mcp` → 404.
     - Admin page renders (28 KB, card "v0.7.1 (bundled)"), no notice.
   - **UNVERIFIED:** OAuth suite and Playwright UI tests were not re-run (no OAuth code changed); the GitHub workflows have not run yet.
+  - Installed on the Local site https://thebananaleafapolocom.local (WP 7.1.3, **PHP 8.5.1**, WooCommerce). The standalone `mcp-adapter` plugin folder was deleted there afterwards. Checked without login: `wp-mcp-tools` and `mcp` REST namespaces present, MCP POST → 401 + `WWW-Authenticate`, protected-resource metadata → 200, no new PHP errors in `logs/php/error.log`. **UNVERIFIED there:** authenticated tools/call and the admin card (needs a WP login / app password).
 - v0.1: tools (see README), registry, dedicated server `/wp-json/wp-mcp-tools/mcp`, theme-file safety.
 - v0.2: OAuth 2.1 authorization server (`includes/oauth/`):
   - discovery (RFC 9728 PRM + RFC 8414 AS metadata), 401 + `WWW-Authenticate resource_metadata`;
