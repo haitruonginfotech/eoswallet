@@ -49,7 +49,7 @@ class WPMCP_Admin_Bar {
 
 		$items = array(
 			'abilities' => 'Abilities API: ' . ( $abilities ? 'Available' : 'Unavailable (WP 6.9+)' ),
-			'adapter'   => 'MCP Adapter: ' . ( $adapter ? 'Active' : 'Not active' ),
+			'adapter'   => 'MCP Adapter: ' . WPMCP_Plugin::adapter_label(),
 			'exposure'  => 'MCP exposure: ' . ( $on ? 'Enabled' : 'Disabled' ),
 			'tools'     => 'Active tools: ' . $tools,
 		);

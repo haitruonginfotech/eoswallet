@@ -433,7 +433,7 @@ class WPMCP_Admin {
 		<div class="wpmcp-stats">
 			<?php
 			self::stat( 'dashicons-networking', 'MCP server', $mcp_on ? 'Enabled' : 'Off', $mcp_on ? 'ok' : 'off' );
-			self::stat( 'dashicons-admin-plugins', 'MCP Adapter', $adapter ? 'Active' : 'Missing', $adapter ? 'ok' : 'bad' );
+			self::stat( 'dashicons-admin-plugins', 'MCP Adapter', WPMCP_Plugin::adapter_label(), $adapter ? 'ok' : 'bad' );
 			self::stat( 'dashicons-lock', 'OAuth sign-in', $oauth_on ? 'Enabled' : 'Disabled', $oauth_on ? 'ok' : 'off' );
 			self::stat( 'dashicons-screenoptions', 'Tools enabled', $enabled . ' / ' . $total, $enabled ? 'ok' : 'off' );
 			?>

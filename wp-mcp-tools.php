@@ -1,11 +1,10 @@
 <?php
 /**
  * Plugin Name:       WP MCP Tools
- * Description:       Registers WordPress abilities (posts, pages, CPT, taxonomies, SCF/ACF fields, media, menus, options, theme files) and exposes them as a dedicated MCP server through the WordPress MCP Adapter, with OAuth 2.1 or Application Password sign-in.
- * Version:           0.3.1
+ * Description:       Registers WordPress abilities (posts, pages, CPT, taxonomies, SCF/ACF fields, media, menus, options, theme files) and exposes them as a dedicated MCP server through the bundled WordPress MCP Adapter, with OAuth 2.1 or Application Password sign-in.
+ * Version:           0.4.0
  * Requires at least: 6.9
  * Requires PHP:      7.4
- * Requires Plugins:  mcp-adapter
  * Author:            Hai Truong IT
  * License:           GPL-2.0-or-later
  * Text Domain:       wp-mcp-tools
@@ -15,7 +14,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'WPMCP_VERSION', '0.3.1' );
+define( 'WPMCP_VERSION', '0.4.0' );
 define( 'WPMCP_FILE', __FILE__ );
 define( 'WPMCP_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WPMCP_URL', plugin_dir_url( __FILE__ ) );
@@ -27,6 +26,17 @@ define( 'WPMCP_NS', 'wpmcp' );
 define( 'WPMCP_SERVER_ID', 'wp-mcp-tools' );
 define( 'WPMCP_ROUTE_NAMESPACE', 'wp-mcp-tools' );
 define( 'WPMCP_ROUTE', 'mcp' );
+
+/**
+ * Bundled WordPress MCP Adapter (Composer package wordpress/mcp-adapter in vendor/).
+ *
+ * Loaded through the Jetpack Autoloader: when the standalone "MCP Adapter" plugin (or another plugin that
+ * bundles it, e.g. Elementor) is also active, only the newest copy of the WP\MCP classes is loaded.
+ * The adapter itself is started in WPMCP_Plugin::boot_adapter(). Update it with Composer (see README).
+ */
+if ( is_readable( WPMCP_DIR . 'vendor/autoload_packages.php' ) ) {
+	require_once WPMCP_DIR . 'vendor/autoload_packages.php';
+}
 
 require_once WPMCP_DIR . 'includes/class-settings.php';
 require_once WPMCP_DIR . 'includes/class-helpers.php';

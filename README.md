@@ -2,7 +2,7 @@
 
 WordPress plugin that registers **Abilities API** abilities for content, SCF/ACF fields, media, menus,
 options and theme files, and exposes them as a **dedicated MCP server** through the official
-[WordPress MCP Adapter](https://github.com/WordPress/mcp-adapter). Similar in spirit to `emcp-tools`,
+[WordPress MCP Adapter](https://github.com/WordPress/mcp-adapter), which is **bundled** in `vendor/` since v0.4.0. Similar in spirit to `emcp-tools`,
 but with no Elementor dependency: it targets classic/SCF sites.
 
 - Endpoint: `/wp-json/wp-mcp-tools/mcp` (server id `wp-mcp-tools`)
@@ -14,19 +14,28 @@ but with no Elementor dependency: it targets classic/SCF sites.
 ## Requirements
 
 - WordPress 6.9+ (Abilities API in core), PHP 7.4+
-- Plugin **MCP Adapter** (tested with 0.6.1) active
+- Nothing else: the **MCP Adapter** (0.7.1) is bundled. The standalone MCP Adapter plugin is not needed; if it (or another plugin that bundles it, e.g. Elementor) is active too, the Jetpack Autoloader loads only the newest copy.
 - Optional: Secure Custom Fields / ACF (enables the `fields` group)
 - OAuth: pretty permalinks enabled, and the web server must pass the `Authorization` header to PHP (the default WordPress `.htaccess` does)
 
 ## Cài đặt & kết nối (Tiếng Việt)
 
-1. Copy thư mục `wp-mcp-tools` vào `wp-content/plugins/`, kích hoạt **MCP Adapter** trước rồi đến **WP MCP Tools**.
+1. Copy thư mục `wp-mcp-tools` (hoặc cài file zip) vào `wp-content/plugins/` rồi kích hoạt **WP MCP Tools**. Không cần cài plugin **MCP Adapter** riêng (đã nhúng sẵn trong `vendor/`). Nếu site đang có plugin MCP Adapter riêng thì có thể tắt và xóa nó.
 2. Vào menu **MCP Tools → Connection** và chọn cách xác thực:
    - **OAuth (khuyên dùng):** không cần copy mật khẩu. Client tự đăng ký, mở một trang trên site để bạn đăng nhập WordPress và bấm **Approve**. Các app đã kết nối hiện trong bảng *Connected apps*, có nút *Sign out* (thu hồi token) và *Remove* (xoá đăng ký).
    - **Application password:** bấm *Generate application password*; mật khẩu được điền sẵn vào các config bên dưới và chỉ hiện một lần.
 3. Chọn client (Claude Desktop, Claude.ai, Claude Code, Cursor, VS Code, ChatGPT, npx mcp-remote) rồi làm theo các bước và copy config.
 
 Lưu ý với site local (`*.local`, `localhost`, http): Claude.ai, connector của Claude Desktop và ChatGPT chạy trên cloud nên **không gọi được** site local. Hãy dùng Claude Code, Cursor, VS Code hoặc `npx mcp-remote` (config Claude Desktop "Option B"; OAuth chạy qua callback localhost). Cách khác là đưa site ra public HTTPS bằng tunnel và điền **Server URL**.
+
+## Bundled MCP Adapter & updates (v0.4.0)
+
+- `vendor/` is committed and shipped: `wordpress/mcp-adapter`, `wordpress/php-mcp-schema`, `automattic/jetpack-autoloader` (Composer, `--no-dev -o`). `wp-mcp-tools.php` loads `vendor/autoload_packages.php`; `WPMCP_Plugin::boot_adapter()` starts the adapter with `WP\MCP\Plugin::instance()` (only when MCP is on).
+- Admin shows which copy is running: *MCP Adapter: v0.7.1 (bundled)* or *(MCP Adapter plugin)* / *(another plugin)*.
+- **Upstream warning:** since 0.7.0 the MCP Adapter team marks "MCP Adapter as a bundled library" as deprecated and says it may not be supported later. If a future version breaks bundling, install the standalone MCP Adapter plugin: it wins when it is newer, and wp-mcp-tools keeps working.
+- **New adapter release → update flow (GitHub):** the workflow `.github/workflows/update-mcp-adapter.yml` runs every Monday (and on demand). It updates `composer.json` / `composer.lock` / `vendor/` to the latest release, runs `tests/e2e.sh` (fresh WordPress + SQLite: MCP initialize, tools/list, tools/call) and opens a pull request `update/mcp-adapter`. Review the changelog, bump the plugin version, merge, then push a tag `vX.Y.Z`; `.github/workflows/release.yml` attaches `wp-mcp-tools-X.Y.Z.zip` to the GitHub release.
+- Manual update (needs PHP + Composer): `composer require "wordpress/mcp-adapter:~X.Y.Z" --no-update && composer update --no-dev -o`, then `bash tests/e2e.sh`.
+- Build a zip locally: `git archive --format=zip --prefix=wp-mcp-tools/ -o wp-mcp-tools-0.4.0.zip HEAD` (excludes `AI/`, `tests/`, `.github/`, `composer.*` via `.gitattributes`).
 
 ## OAuth endpoints
 

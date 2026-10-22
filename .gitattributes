@@ -1,0 +1,12 @@
+* text=auto eol=lf
+*.png binary
+*.zip binary
+
+# Not shipped in the plugin zip (git archive / release workflow)
+/.github        export-ignore
+/.gitattributes export-ignore
+/.gitignore     export-ignore
+/AI             export-ignore
+/tests          export-ignore
+/composer.json  export-ignore
+/composer.lock  export-ignore

@@ -53,6 +53,7 @@ class WPMCP_Plugin {
 			add_action( 'wp_abilities_api_categories_init', array( 'WPMCP_Registry', 'register_categories' ) );
 			add_action( 'wp_abilities_api_init', array( 'WPMCP_Registry', 'register_abilities' ) );
 			add_action( 'mcp_adapter_init', array( __CLASS__, 'create_server' ) );
+			self::boot_adapter();
 		}
 
 		WPMCP_Admin_Bar::init();
@@ -61,6 +62,56 @@ class WPMCP_Plugin {
 			WPMCP_Admin::init();
 			add_action( 'admin_notices', array( __CLASS__, 'notice_no_adapter' ) );
 		}
+	}
+
+	/**
+	 * Starts the MCP Adapter (bundled in vendor/, or the standalone plugin if that copy is newer).
+	 *
+	 * WP\MCP\Plugin::instance() is what the standalone plugin calls. Using it (instead of McpAdapter::instance())
+	 * defines WP_MCP_VERSION / WP_MCP_DIR, so the adapter does not log its "loaded as a bundled dependency"
+	 * deprecation notice on every REST request. Both calls are singletons, so this is a no-op when the
+	 * standalone plugin has already started the adapter.
+	 */
+	public static function boot_adapter(): void {
+		if ( class_exists( '\WP\MCP\Plugin' ) ) {
+			\WP\MCP\Plugin::instance();
+		} elseif ( class_exists( '\WP\MCP\Core\McpAdapter' ) ) {
+			\WP\MCP\Core\McpAdapter::instance();
+		}
+	}
+
+	/**
+	 * Which MCP Adapter copy is loaded.
+	 *
+	 * @return array{active: bool, version: string, source: string} source = bundled | plugin | other | none.
+	 */
+	public static function adapter_info(): array {
+		if ( ! class_exists( '\WP\MCP\Core\McpAdapter' ) ) {
+			return array( 'active' => false, 'version' => '', 'source' => 'none' );
+		}
+		$version = defined( 'WP\MCP\Core\McpAdapter::VERSION' ) ? (string) \WP\MCP\Core\McpAdapter::VERSION : '';
+		$file    = wp_normalize_path( (string) ( new ReflectionClass( '\WP\MCP\Core\McpAdapter' ) )->getFileName() );
+		$source  = 'other';
+		if ( 0 === strpos( $file, wp_normalize_path( WPMCP_DIR ) ) ) {
+			$source = 'bundled';
+		} elseif ( false !== strpos( $file, '/plugins/mcp-adapter/' ) ) {
+			$source = 'plugin';
+		}
+		return array( 'active' => true, 'version' => $version, 'source' => $source );
+	}
+
+	/** Short status text, e.g. "v0.7.1 (bundled)". */
+	public static function adapter_label(): string {
+		$info = self::adapter_info();
+		if ( ! $info['active'] ) {
+			return 'Missing';
+		}
+		$from = array(
+			'bundled' => 'bundled',
+			'plugin'  => 'MCP Adapter plugin',
+			'other'   => 'another plugin',
+		);
+		return trim( ( $info['version'] ? 'v' . $info['version'] . ' ' : '' ) . '(' . $from[ $info['source'] ] . ')' );
 	}
 
 	/**
@@ -110,9 +161,9 @@ class WPMCP_Plugin {
 	}
 
 	public static function notice_no_adapter(): void {
-		if ( class_exists( '\WP\MCP\Core\McpAdapter' ) || ! current_user_can( 'activate_plugins' ) ) {
+		if ( class_exists( '\WP\MCP\Core\McpAdapter' ) || ! WPMCP_Settings::mcp_enabled() || ! current_user_can( 'activate_plugins' ) ) {
 			return;
 		}
-		echo '<div class="notice notice-warning"><p><strong>WP MCP Tools</strong>: activate the <code>MCP Adapter</code> plugin to expose the MCP server.</p></div>';
+		echo '<div class="notice notice-error"><p><strong>WP MCP Tools</strong>: the bundled MCP Adapter could not be loaded (<code>wp-mcp-tools/vendor/</code> is missing or incomplete). Re-install the plugin from its release zip.</p></div>';
 	}
 }

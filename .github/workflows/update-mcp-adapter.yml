@@ -1,0 +1,72 @@
+# Weekly check for a new WordPress MCP Adapter release.
+# When one exists: update composer.json/composer.lock/vendor, run the WordPress e2e smoke test,
+# and open (or refresh) a pull request. Merging the PR = adopting the new adapter version.
+name: Update bundled MCP Adapter
+
+on:
+  schedule:
+    - cron: '17 2 * * 1' # Mondays 02:17 UTC (09:17 Vietnam time)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: composer:v2
+          extensions: sqlite3, pdo_sqlite, zip
+
+      - name: Compare bundled and latest MCP Adapter
+        id: ver
+        run: |
+          LATEST=$(curl -fsS https://repo.packagist.org/p2/wordpress/mcp-adapter.json \
+            | jq -r '.packages["wordpress/mcp-adapter"][].version' \
+            | grep -E '^v?[0-9]+\.[0-9]+\.[0-9]+$' | sed 's/^v//' | sort -V | tail -1)
+          CURRENT=$(jq -r '.packages[] | select(.name=="wordpress/mcp-adapter") | .version' vendor/composer/installed.json | sed 's/^v//')
+          echo "latest=$LATEST"   >> "$GITHUB_OUTPUT"
+          echo "current=$CURRENT" >> "$GITHUB_OUTPUT"
+          echo "Bundled: $CURRENT  Latest: $LATEST"
+
+      - name: Update composer.json, composer.lock and vendor/
+        if: steps.ver.outputs.latest != steps.ver.outputs.current || hashFiles('composer.lock') == ''
+        run: |
+          composer require "wordpress/mcp-adapter:~${{ steps.ver.outputs.latest }}" --no-update --no-interaction
+          composer update --no-dev --optimize-autoloader --no-interaction
+
+      - name: PHP lint
+        run: find . -path ./vendor -prune -o -name '*.php' -print0 | xargs -0 -n1 php -l > /dev/null
+
+      - name: E2E smoke test (fresh WordPress + SQLite, MCP initialize / tools/list / tools/call)
+        id: e2e
+        continue-on-error: true
+        run: bash tests/e2e.sh "$RUNNER_TEMP/e2e"
+
+      - name: Open or update the pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: update/mcp-adapter
+          delete-branch: true
+          commit-message: "Update bundled MCP Adapter to ${{ steps.ver.outputs.latest }}"
+          title: "Update bundled MCP Adapter ${{ steps.ver.outputs.current }} → ${{ steps.ver.outputs.latest }}${{ steps.e2e.outcome == 'failure' && ' (e2e FAILED)' || '' }}"
+          body: |
+            Automated update of `wordpress/mcp-adapter` in `vendor/`.
+
+            - Bundled: `${{ steps.ver.outputs.current }}`
+            - Latest on Packagist: `${{ steps.ver.outputs.latest }}`
+            - E2E smoke test: **${{ steps.e2e.outcome }}** (see the workflow run log)
+            - Changelog: https://github.com/WordPress/mcp-adapter/blob/trunk/CHANGELOG.md
+
+            Before merging: read the changelog for breaking changes (0.x releases may change APIs),
+            bump `Version:` + `WPMCP_VERSION` in `wp-mcp-tools.php`, update `AI/AI_HANDOFF.md`, then tag `vX.Y.Z` to build the release zip.
+
+      - name: Fail the run if the e2e test failed
+        if: steps.e2e.outcome == 'failure'
+        run: exit 1
