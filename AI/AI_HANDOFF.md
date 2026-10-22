@@ -8,8 +8,13 @@ and covers content, SCF/ACF values, media, menus, options and theme files. Clien
 It was first installed on the Local site `mklogistics.com.sg` (`D:\localwp\mklogistics.com.sg\app\public\wp-content\plugins\wp-mcp-tools`).
 
 ## Repository
-- Source of truth: `D:\wordpress\AI\wp-mcp-tools` (git, branch `main`; the user will push it to GitHub). Commit 1 = the original 0.3.1 (backup), commit 2 = v0.4.0.
+- GitHub: https://github.com/haitruonginfotech/wp-mcp-tools (public), branch **`master`**. The repo was reused from an old React Native app: its history is kept (merge commit "Replace the old React Native app…", `merge -s ours`), its files (`src/` …) are gone from the tree. Old `dependabot/npm_and_yarn/*` branches on GitHub belong to that app and can be deleted.
+- Local clone: `D:\wordpress\AI\wp-mcp-tools` (`origin` = the URL above, `master` tracks `origin/master`). Commit 0714f7d = the original 0.3.1 (backup), ab7982d = v0.4.0.
 - Working copy installed on the Local site `D:\localwp\thebananaleafapolo.com\app\public\wp-content\plugins\wp-mcp-tools` (same files, no `.git`).
+- Pushing is done by the owner from Windows (the Claude sessions can read the repo but have no push access; the Claude GitHub App is not installed on `haitruonginfotech`).
+- **Sync site → repo (PowerShell)** after editing the plugin on the site:
+  `robocopy D:\localwp\thebananaleafapolo.com\app\public\wp-content\plugins\wp-mcp-tools D:\wordpress\AI\wp-mcp-tools /MIR /XD .git` then in `D:\wordpress\AI\wp-mcp-tools`: `git add -A`, `git commit -m "…"`, `git push`.
+  `/MIR` also deletes repo files that are not on the site, and `/XD .git` keeps the git folder. Reverse direction (after merging an update PR): `git pull`, then the same robocopy with source and destination swapped (still `/XD .git`).
 
 ## Current Status
 **v0.4.0 (2026-10-22): MCP Adapter 0.7.1 bundled.** Tested on WP 7.1.3 + SQLite (see Completed). NOT yet on any live site; other sites still run 0.3.x + the standalone MCP Adapter plugin.
@@ -20,7 +25,7 @@ v0.3.0 adds local-file uploads (upload link + chunked base64). It is tested in t
 **v0.3.0 is NOT yet installed on live.** The user updates the plugin from the zip.
 
 ## Current Task
-None in progress. Next: push the repo to GitHub, enable Actions, run "Update bundled MCP Adapter" once (it creates `composer.lock` and a PR).
+None in progress. Next: owner runs `git push` (first push of the plugin to GitHub), allows Actions to create PRs, runs "Update bundled MCP Adapter" once (it creates `composer.lock` and a PR).
 
 ## Completed
 - v0.4.0 (2026-10-22): **bundled MCP Adapter** (user request; DECISIONS "v0.4").
@@ -83,7 +88,7 @@ None in progress. Next: push the repo to GitHub, enable Actions, run "Update bun
   - Settings option and all OAuth/MCP behaviour are unchanged — 0.3.1 is a drop-in replacement for 0.3.0.
 
 ## Pending
-- TODO: push `D:\wordpress\AI\wp-mcp-tools` to GitHub; enable Actions; run the update workflow once.
+- TODO: first `git push` from Windows; Settings → Actions → General → allow GitHub Actions to create and approve pull requests; run the update workflow once.
 - TODO: roll out 0.4.0 to the other sites (mklogistics.sg, mylivorahome.sg, lawrys.com.sg …): install the zip, then deactivate + delete the standalone MCP Adapter plugin there.
 - RISK: upstream may drop bundled-library support in a future release; the weekly e2e PR is the early warning.
 - TODO: after the user installs v0.3.0 on live, run one real upload-link test. **UNVERIFIED:** whether Wordfence or the host limits front-end multipart POSTs, and the live `upload_max_filesize`.
