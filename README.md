@@ -26,16 +26,21 @@ but with no Elementor dependency: it targets classic/SCF sites.
    - **Application password:** bấm *Generate application password*; mật khẩu được điền sẵn vào các config bên dưới và chỉ hiện một lần.
 3. Chọn client (Claude Desktop, Claude.ai, Claude Code, Cursor, VS Code, ChatGPT, npx mcp-remote) rồi làm theo các bước và copy config.
 
-Lưu ý với site local (`*.local`, `localhost`, http): Claude.ai, connector của Claude Desktop và ChatGPT chạy trên cloud nên **không gọi được** site local. Hãy dùng Claude Code, Cursor, VS Code hoặc `npx mcp-remote` (config Claude Desktop "Option B"; OAuth chạy qua callback localhost). Cách khác là đưa site ra public HTTPS bằng tunnel và điền **Server URL**.
+Lưu ý với site local (`*.local`, `localhost`, http): Claude.ai, connector của Claude Desktop và ChatGPT chạy trên cloud nên **không gọi được** site local. Hãy dùng Claude Code, Cursor, VS Code hoặc `npx mcp-remote` (config Claude Desktop "Option B"; OAuth chạy qua callback localhost). Với LocalWP (HTTPS tự ký), Node báo "Connection closed": thêm `"env": { "NODE_EXTRA_CA_CERTS": "C:\\Users\\<user>\\AppData\\Roaming\\Local\\run\\router\\nginx\\certs\\<site>.local.crt" }` vào config. Cách khác là đưa site ra public HTTPS bằng tunnel và điền **Server URL**.
 
-## Bundled MCP Adapter & updates (v0.4.0)
+## Bundled MCP Adapter & updates
 
 - `vendor/` is committed and shipped: `wordpress/mcp-adapter`, `wordpress/php-mcp-schema`, `automattic/jetpack-autoloader` (Composer, `--no-dev -o`). `wp-mcp-tools.php` loads `vendor/autoload_packages.php`; `WPMCP_Plugin::boot_adapter()` starts the adapter with `WP\MCP\Plugin::instance()` (only when MCP is on).
 - Admin shows which copy is running: *MCP Adapter: v0.7.1 (bundled)* or *(MCP Adapter plugin)* / *(another plugin)*.
 - **Upstream warning:** since 0.7.0 the MCP Adapter team marks "MCP Adapter as a bundled library" as deprecated and says it may not be supported later. If a future version breaks bundling, install the standalone MCP Adapter plugin: it wins when it is newer, and wp-mcp-tools keeps working.
-- **New adapter release → update flow (GitHub):** the workflow `.github/workflows/update-mcp-adapter.yml` runs every Monday (and on demand). It updates `composer.json` / `composer.lock` / `vendor/` to the latest release, runs `tests/e2e.sh` (fresh WordPress + SQLite: MCP initialize, tools/list, tools/call) and opens a pull request `update/mcp-adapter`. Review the changelog, bump the plugin version, merge, then push a tag `vX.Y.Z`; `.github/workflows/release.yml` attaches `wp-mcp-tools-X.Y.Z.zip` to the GitHub release.
+- **New adapter release → automatic release (GitHub, v0.5.0+):** `.github/workflows/update-mcp-adapter.yml` runs every Monday 02:17 UTC (and on demand). It updates `composer.json` / `composer.lock` / `vendor/` to the latest release and runs `tests/e2e.sh` (fresh WordPress + SQLite: MCP initialize, tools/list, tools/call).
+  - **e2e passes:** commits to `master`, bumps the patch version (`Version:` + `WPMCP_VERSION`), tags `vX.Y.Z` and publishes a GitHub Release with `wp-mcp-tools-X.Y.Z.zip`.
+  - **e2e fails** (or auto-release is off): opens a pull request `update/mcp-adapter`; nothing is released.
+  - Turn auto-release off: repository variable `MCP_AUTO_RELEASE` = `false`, or run the workflow with *auto_release* unticked.
+- **Sites update themselves (v0.5.0+):** the header `Update URI: https://github.com/haitruonginfotech/wp-mcp-tools` + `includes/class-updater.php` make WordPress read the latest GitHub Release (public API, no token, cached 6 h; *Dashboard → Updates → Check again* skips the cache). Updates appear like any plugin update, with *View details*. Click **Enable auto-updates** on the Plugins screen and WordPress installs new releases in the background (with its usual fatal-error check and rollback). A plugin installed in another folder name (e.g. `wp-mcp-tools-main`) keeps that folder. Options in `wp-config.php`: `define( 'WPMCP_UPDATE_REPO', 'owner/repo' );` (fork), `define( 'WPMCP_DISABLE_UPDATER', true );`.
+- Manual release: bump `Version:` + `WPMCP_VERSION`, commit, push a tag `vX.Y.Z` (must match `WPMCP_VERSION`); `.github/workflows/release.yml` attaches the zip to the GitHub Release.
 - Manual update (needs PHP + Composer): `composer require "wordpress/mcp-adapter:~X.Y.Z" --no-update && composer update --no-dev -o`, then `bash tests/e2e.sh`.
-- Build a zip locally: `git archive --format=zip --prefix=wp-mcp-tools/ -o wp-mcp-tools-0.4.0.zip HEAD` (excludes `AI/`, `tests/`, `.github/`, `composer.*` via `.gitattributes`).
+- Build a zip locally: `git archive --format=zip --prefix=wp-mcp-tools/ -o wp-mcp-tools-X.Y.Z.zip HEAD` (excludes `AI/`, `tests/`, `.github/`, `composer.*` via `.gitattributes`).
 
 ## OAuth endpoints
 

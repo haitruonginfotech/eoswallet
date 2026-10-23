@@ -19,6 +19,14 @@
 - `acf_get_value('option', …)` returns empty. The id must be normalised to `options`.
 - Firing `wpmcp_register_tools` on `plugins_loaded` is too early for themes. It now runs on `after_setup_theme`.
 
+## v0.5 — Self-update from GitHub Releases + automatic adapter releases (2026-10-23)
+- Owner wants new MCP Adapter versions to reach sites without manual work, repo public.
+- Update channel = GitHub Releases of the public repo via WP core `Update URI` + `update_plugins_github.com` (WP 5.8+), not a third-party library (plugin-update-checker) → no extra dependency.
+- Only the built release asset is installed (it contains `vendor/`); GitHub's source zip would not work.
+- Auto-release only when the e2e smoke test passes; failures go to a PR. Kill switch: repo variable `MCP_AUTO_RELEASE=false`.
+- Sites still choose: WordPress' per-plugin "Enable auto-updates" toggle (not forced by the plugin).
+- Risk accepted by owner: 0.x adapter releases can break APIs; the e2e test + WP's rollback on fatal error are the safety net.
+
 ## v0.4 — Bundled MCP Adapter (2026-10-22)
 - **Decision (user):** ship the MCP Adapter inside wp-mcp-tools (`vendor/`, Composer) so a site needs one plugin. The user chose this after being told that upstream deprecated bundling in 0.7.0 ("Using MCP Adapter as a bundled library is deprecated. Install the MCP Adapter plugin instead.").
 - Start the adapter with `WP\MCP\Plugin::instance()`, not `McpAdapter::instance()`: the plugin class defines `WP_MCP_VERSION`, so `McpAdapter::check_plugin_loaded()` does not call `_deprecated_function` on every REST request.

@@ -17,6 +17,7 @@ It was first installed on the Local site `mklogistics.com.sg` (`D:\localwp\mklog
   `/MIR` also deletes repo files that are not on the site, and `/XD .git` keeps the git folder. Reverse direction (after merging an update PR): `git pull`, then the same robocopy with source and destination swapped (still `/XD .git`).
 
 ## Current Status
+**v0.5.0 (2026-10-23): self-updater + automatic adapter releases.** Committed locally in `D:\wordpress\AI\wp-mcp-tools` and installed on thebananaleafapolocom.local; **not pushed / not released until the owner pushes `master` + tag `v0.5.0`**. Sites on ≤0.4.0 must install 0.5.0 once by hand (zip); from then on they update from GitHub Releases.
 **v0.4.0 (2026-10-22): MCP Adapter 0.7.1 bundled.** Tested on WP 7.1.3 + SQLite (see Completed). NOT yet on any live site; other sites still run 0.3.x + the standalone MCP Adapter plugin.
 v0.3.1 (2026-10-14): admin UI redesign + new icon, no tool/API changes. 50 tools.
 Installed on https://mylivorahome.sg (see "v0.3.1" below). Zip archived at `D:\wordpress\AI\wp-mcp-tools-0.3.1.zip`.
@@ -25,9 +26,15 @@ v0.3.0 adds local-file uploads (upload link + chunked base64). It is tested in t
 **v0.3.0 is NOT yet installed on live.** The user updates the plugin from the zip.
 
 ## Current Task
-None in progress. Next: owner runs `git push` (first push of the plugin to GitHub), allows Actions to create PRs, runs "Update bundled MCP Adapter" once (it creates `composer.lock` and a PR).
+None in progress. Owner: `git push origin master` and `git push origin v0.5.0` from `D:\wordpress\AI\wp-mcp-tools` → release.yml publishes `wp-mcp-tools-0.5.0.zip`; then close PR #24 (its content is in v0.5.0) and the old dependabot PRs.
 
 ## Completed
+- v0.5.0 (2026-10-23): **sites update themselves; new MCP Adapter versions are released automatically** (user request; DECISIONS "v0.5").
+  - `includes/class-updater.php` (`WPMCP_Updater`) + header `Update URI: https://github.com/haitruonginfotech/wp-mcp-tools`: filter `update_plugins_github.com` reads `GET api.github.com/repos/<repo>/releases/latest` (no token, cached 6 h in site transient `wpmcp_update_release`, 1 h after an error, `force-check` skips cache), offers only the `wp-mcp-tools-X.Y.Z.zip` asset from github.com; `plugins_api` (View details + release notes); `upgrader_source_selection` keeps a non-standard folder name. Constants `WPMCP_UPDATE_REPO`, `WPMCP_DISABLE_UPDATER`.
+  - `update-mcp-adapter.yml`: e2e pass → commit on master, patch bump, tag, `gh release create` with the zip (same job — tags pushed with GITHUB_TOKEN do not trigger release.yml); e2e fail or `MCP_AUTO_RELEASE=false` / input false → PR as before. `release.yml`: tag must equal `WPMCP_VERSION`.
+  - PR #24's content (composer.lock + jetpack-autoloader 6.0.1 → 6.0.2) is included in v0.5.0.
+  - Verified in the sandbox (WP 7.1.3 + SQLite, PHP 8.3): `tests/e2e.sh` OK (46 tools, debug.log empty); `tests/updater.php` with a fake GitHub release 0.5.1: update offered, View details, background auto-update (WP_Automatic_Updater incl. loopback fatal-error check) installs 0.5.1 and the plugin stays active; same with the plugin in folder `wp-mcp-tools-main/`.
+  - Secret scan before publishing (repo was already public): gitleaks over all 50 commits / all branches → no leaks; only the standard Android debug keystore password ("android") from the old app.
 - v0.4.0 (2026-10-22): **bundled MCP Adapter** (user request; DECISIONS "v0.4").
   - `composer.json` (wordpress/mcp-adapter ~0.7.1, automattic/jetpack-autoloader ^6.0, platform PHP 7.4) + committed `vendor/` (2.6 MB).
   - `wp-mcp-tools.php`: loads `vendor/autoload_packages.php`; header `Requires Plugins: mcp-adapter` removed; version 0.4.0.

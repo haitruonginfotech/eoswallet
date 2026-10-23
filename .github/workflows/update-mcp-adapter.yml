@@ -1,12 +1,26 @@
 # Weekly check for a new WordPress MCP Adapter release.
-# When one exists: update composer.json/composer.lock/vendor, run the WordPress e2e smoke test,
-# and open (or refresh) a pull request. Merging the PR = adopting the new adapter version.
+# When one exists: update composer.json/composer.lock/vendor and run the WordPress e2e smoke test.
+#   - e2e passes  -> commit to master, bump the patch version (0.5.0 -> 0.5.1), tag vX.Y.Z and publish a
+#                    GitHub Release with wp-mcp-tools-X.Y.Z.zip. Sites running WP MCP Tools 0.5.0+ see the update
+#                    (and install it themselves when "Enable auto-updates" is on).
+#   - e2e fails   -> open (or refresh) a pull request for a human to look at. Nothing is released.
+# Turn auto-release off: repository variable MCP_AUTO_RELEASE = false (Settings -> Secrets and variables -> Actions -> Variables),
+# or run manually with auto_release = false. Then every update goes to a pull request.
 name: Update bundled MCP Adapter
 
 on:
   schedule:
     - cron: '17 2 * * 1' # Mondays 02:17 UTC (09:17 Vietnam time)
   workflow_dispatch:
+    inputs:
+      auto_release:
+        description: 'Release automatically when the e2e test passes'
+        type: boolean
+        default: true
+
+concurrency:
+  group: update-mcp-adapter
+  cancel-in-progress: false
 
 permissions:
   contents: write
@@ -49,7 +63,57 @@ jobs:
         continue-on-error: true
         run: bash tests/e2e.sh "$RUNNER_TEMP/e2e"
 
+      - name: Anything changed?
+        id: diff
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then echo "changed=true" >> "$GITHUB_OUTPUT"; else echo "changed=false" >> "$GITHUB_OUTPUT"; fi
+
+      - name: Decide
+        id: mode
+        env:
+          AUTO_INPUT: ${{ github.event_name == 'workflow_dispatch' && format('{0}', inputs.auto_release) || 'true' }}
+          AUTO_VAR: ${{ vars.MCP_AUTO_RELEASE }}
+        run: |
+          AUTO=true
+          [ "$AUTO_INPUT" = "false" ] && AUTO=false
+          [ "$AUTO_VAR" = "false" ] && AUTO=false
+          if [ "${{ steps.diff.outputs.changed }}" != "true" ]; then MODE=none
+          elif [ "${{ steps.e2e.outcome }}" = "success" ] && [ "$AUTO" = "true" ]; then MODE=release
+          else MODE=pr; fi
+          echo "mode=$MODE" >> "$GITHUB_OUTPUT"; echo "Mode: $MODE (auto=$AUTO, e2e=${{ steps.e2e.outcome }})"
+
+      - name: Bump version, commit to master, tag
+        id: bump
+        if: steps.mode.outputs.mode == 'release'
+        run: |
+          OLD=$(grep -oP "define\( 'WPMCP_VERSION', '\K[^']+" wp-mcp-tools.php)
+          NEW=$(echo "$OLD" | awk -F. '{print $1"."$2"."$3+1}')
+          sed -i -E "s/^( \* Version: +)$OLD$/\1$NEW/" wp-mcp-tools.php
+          sed -i "s/define( 'WPMCP_VERSION', '$OLD' );/define( 'WPMCP_VERSION', '$NEW' );/" wp-mcp-tools.php
+          grep -q "Version:           $NEW" wp-mcp-tools.php && grep -q "'WPMCP_VERSION', '$NEW'" wp-mcp-tools.php
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898283+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m "v$NEW: bundled MCP Adapter ${{ steps.ver.outputs.latest }}" -m "Automated: e2e smoke test passed (run ${{ github.run_id }})."
+          git tag "v$NEW"
+          git push origin HEAD:${{ github.ref_name }} "v$NEW"
+          echo "version=$NEW" >> "$GITHUB_OUTPUT"
+
+      - name: Build zip and publish the GitHub Release
+        if: steps.mode.outputs.mode == 'release'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          V: ${{ steps.bump.outputs.version }}
+        run: |
+          git archive --format=zip --prefix=wp-mcp-tools/ -o "wp-mcp-tools-$V.zip" "v$V"
+          printf 'Automated release.\n\n- Bundled WordPress MCP Adapter: %s → %s\n- E2E smoke test: passed\n- MCP Adapter changelog: https://github.com/WordPress/mcp-adapter/blob/trunk/CHANGELOG.md\n' \
+            "${{ steps.ver.outputs.current }}" "${{ steps.ver.outputs.latest }}" > notes.md
+          gh release create "v$V" "wp-mcp-tools-$V.zip" --title "v$V" --notes-file notes.md
+          # A pull request left over from an earlier failed run is now obsolete.
+          git push origin --delete update/mcp-adapter 2>/dev/null || true
+
       - name: Open or update the pull request
+        if: steps.mode.outputs.mode == 'pr'
         uses: peter-evans/create-pull-request@v7
         with:
           branch: update/mcp-adapter
@@ -64,8 +128,9 @@ jobs:
             - E2E smoke test: **${{ steps.e2e.outcome }}** (see the workflow run log)
             - Changelog: https://github.com/WordPress/mcp-adapter/blob/trunk/CHANGELOG.md
 
-            Before merging: read the changelog for breaking changes (0.x releases may change APIs),
-            bump `Version:` + `WPMCP_VERSION` in `wp-mcp-tools.php`, update `AI/AI_HANDOFF.md`, then tag `vX.Y.Z` to build the release zip.
+            Not released automatically (e2e failed, or auto-release is off). Before merging: read the changelog for
+            breaking changes (0.x releases may change APIs), bump `Version:` + `WPMCP_VERSION` in `wp-mcp-tools.php`,
+            update `AI/AI_HANDOFF.md`, then push a tag `vX.Y.Z` (release.yml builds the zip and the GitHub Release).
 
       - name: Fail the run if the e2e test failed
         if: steps.e2e.outcome == 'failure'

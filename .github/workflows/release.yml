@@ -1,5 +1,7 @@
-# Push a tag like v0.4.0 → builds wp-mcp-tools-0.4.0.zip (git archive, honours .gitattributes export-ignore)
-# and attaches it to a GitHub release. Run manually to just get the zip as a build artifact.
+# Push a tag like v0.5.0 → builds wp-mcp-tools-0.5.0.zip (git archive, honours .gitattributes export-ignore)
+# and attaches it to a GitHub release; sites with WP MCP Tools 0.5.0+ pick it up (includes/class-updater.php).
+# The tag must equal WPMCP_VERSION. Run manually to just get the zip as a build artifact.
+# (Automatic adapter updates publish their release from update-mcp-adapter.yml instead.)
 name: Release zip
 
 on:
@@ -19,6 +21,9 @@ jobs:
         id: zip
         run: |
           VERSION=$(grep -oP "define\( 'WPMCP_VERSION', '\K[^']+" wp-mcp-tools.php)
+          if [ "${GITHUB_REF_TYPE}" = "tag" ] && [ "${GITHUB_REF_NAME}" != "v$VERSION" ]; then
+            echo "::error::Tag ${GITHUB_REF_NAME} does not match WPMCP_VERSION $VERSION"; exit 1
+          fi
           git archive --format=zip --prefix=wp-mcp-tools/ -o "wp-mcp-tools-$VERSION.zip" HEAD
           echo "file=wp-mcp-tools-$VERSION.zip" >> "$GITHUB_OUTPUT"
       - uses: actions/upload-artifact@v4

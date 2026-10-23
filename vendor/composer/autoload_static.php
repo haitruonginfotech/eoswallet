@@ -7,27 +7,27 @@ namespace Composer\Autoload;
 class ComposerStaticInit9ce12e82a21506aaeb8daf2fbe117744
 {
     public static $prefixLengthsPsr4 = array (
-        'W' => 
+        'W' =>
         array (
             'WP\\McpSchema\\' => 13,
             'WP\\MCP\\' => 7,
         ),
-        'A' => 
+        'A' =>
         array (
             'Automattic\\Jetpack\\Autoloader\\' => 30,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'WP\\McpSchema\\' => 
+        'WP\\McpSchema\\' =>
         array (
             0 => __DIR__ . '/..' . '/wordpress/php-mcp-schema/src',
         ),
-        'WP\\MCP\\' => 
+        'WP\\MCP\\' =>
         array (
             0 => __DIR__ . '/..' . '/wordpress/mcp-adapter/includes',
         ),
-        'Automattic\\Jetpack\\Autoloader\\' => 
+        'Automattic\\Jetpack\\Autoloader\\' =>
         array (
             0 => __DIR__ . '/..' . '/automattic/jetpack-autoloader/src',
         ),
