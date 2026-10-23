@@ -17,7 +17,7 @@ It was first installed on the Local site `mklogistics.com.sg` (`D:\localwp\mklog
   `/MIR` also deletes repo files that are not on the site, and `/XD .git` keeps the git folder. Reverse direction (after merging an update PR): `git pull`, then the same robocopy with source and destination swapped (still `/XD .git`).
 
 ## Current Status
-**v0.5.0 (2026-10-23): self-updater + automatic adapter releases.** Committed locally in `D:\wordpress\AI\wp-mcp-tools` and installed on thebananaleafapolocom.local; **not pushed / not released until the owner pushes `master` + tag `v0.5.0`**. Sites on ≤0.4.0 must install 0.5.0 once by hand (zip); from then on they update from GitHub Releases.
+**v0.5.0 (2026-10-23): self-updater + automatic adapter releases.** **Released 2026-10-23**: https://github.com/haitruonginfotech/wp-mcp-tools/releases/tag/v0.5.0 (asset `wp-mcp-tools-0.5.0.zip`, SHA-256 identical to `D:\wordpress\AI\wp-mcp-tools-0.5.0.zip`); installed on thebananaleafapolocom.local. Sites on ≤0.4.0 must install 0.5.0 once by hand (zip); from then on they update from GitHub Releases.
 **v0.4.0 (2026-10-22): MCP Adapter 0.7.1 bundled.** Tested on WP 7.1.3 + SQLite (see Completed). NOT yet on any live site; other sites still run 0.3.x + the standalone MCP Adapter plugin.
 v0.3.1 (2026-10-14): admin UI redesign + new icon, no tool/API changes. 50 tools.
 Installed on https://mylivorahome.sg (see "v0.3.1" below). Zip archived at `D:\wordpress\AI\wp-mcp-tools-0.3.1.zip`.
@@ -26,7 +26,7 @@ v0.3.0 adds local-file uploads (upload link + chunked base64). It is tested in t
 **v0.3.0 is NOT yet installed on live.** The user updates the plugin from the zip.
 
 ## Current Task
-None in progress. Owner: `git push origin master` and `git push origin v0.5.0` from `D:\wordpress\AI\wp-mcp-tools` → release.yml publishes `wp-mcp-tools-0.5.0.zip`; then close PR #24 (its content is in v0.5.0) and the old dependabot PRs.
+None in progress. Owner: close PR #24 (its content is in v0.5.0) and the old dependabot PRs; install 0.5.0 once on the other sites (Plugins → Upload → "Replace current with uploaded"), then click "Enable auto-updates"; the standalone MCP Adapter plugin can be removed there.
 
 ## Completed
 - v0.5.0 (2026-10-23): **sites update themselves; new MCP Adapter versions are released automatically** (user request; DECISIONS "v0.5").
