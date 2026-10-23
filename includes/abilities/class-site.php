@@ -153,6 +153,7 @@ class WPMCP_Site {
 			'theme_write'        => WPMCP_Settings::theme_write_allowed(),
 			'current_user'       => wp_get_current_user()->user_login,
 			'mcp_tools_version'  => WPMCP_VERSION,
+			'elementor'          => WPMCP_Elementor::info(),
 		);
 	}
 

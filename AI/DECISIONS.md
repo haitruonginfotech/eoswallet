@@ -19,6 +19,12 @@
 - `acf_get_value('option', …)` returns empty. The id must be normalised to `options`.
 - Firing `wpmcp_register_tools` on `plugins_loaded` is too early for themes. It now runs on `after_setup_theme`.
 
+## v0.6 — Elementor bridge (2026-10-23)
+- Elementor 4.3+ already implements builder MCP tools (atomic widgets, classes, variables, components, site parts with Pro). Re-implementing them would duplicate and drift; the bridge only registers Elementor's own ability objects when Elementor has not, and lists their ids on our server.
+- Not forcing Elementor's own setting/server on: our server is independent; both can run together.
+- Tool names stay Elementor's (`elementor-*`), not `wpmcp-*`, so Elementor's prompts/descriptions that reference each other keep matching.
+- Classic (v3) widget editing is not covered by Elementor's MCP (gated to Atomic Editor); use EMCP Tools for v3 widget sites if needed.
+
 ## v0.5 — Self-update from GitHub Releases + automatic adapter releases (2026-10-23)
 - Owner wants new MCP Adapter versions to reach sites without manual work, repo public.
 - Update channel = GitHub Releases of the public repo via WP core `Update URI` + `update_plugins_github.com` (WP 5.8+), not a third-party library (plugin-update-checker) → no extra dependency.

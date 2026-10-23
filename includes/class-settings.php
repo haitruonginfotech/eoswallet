@@ -27,6 +27,7 @@ class WPMCP_Settings {
 				'menus'       => 1,
 				'theme'       => 1,
 				'theme-write' => 1,
+				'elementor'   => 1,
 			),
 			// Also flag abilities as public on the MCP Adapter default server.
 			'expose_default_server' => 0,

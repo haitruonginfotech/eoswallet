@@ -19,6 +19,7 @@ class WPMCP_Plugin {
 		'WPMCP_Uploads',
 		'WPMCP_Menus',
 		'WPMCP_Theme',
+		'WPMCP_Elementor',
 	);
 
 	public static function init(): void {
@@ -125,20 +126,21 @@ class WPMCP_Plugin {
 			wp_get_abilities();
 		}
 
-		$tools = WPMCP_Registry::registered_abilities();
+		$tools     = array_merge( WPMCP_Registry::registered_abilities(), WPMCP_Elementor::tool_ids() );
+		$resources = WPMCP_Elementor::resource_ids();
 
 		$result = $adapter->create_server(
 			WPMCP_SERVER_ID,
 			WPMCP_ROUTE_NAMESPACE,
 			WPMCP_ROUTE,
 			'WP MCP Tools — ' . get_bloginfo( 'name' ),
-			'Content, SCF/ACF, media, menus, options and theme-file tools for ' . home_url(),
+			'Content, SCF/ACF, media, menus, options, theme-file' . ( WPMCP_Elementor::tool_ids() ? ' and Elementor' : '' ) . ' tools for ' . home_url(),
 			WPMCP_VERSION,
 			array( \WP\MCP\Transport\HttpTransport::class ),
 			\WP\MCP\Infrastructure\ErrorHandling\ErrorLogMcpErrorHandler::class,
 			\WP\MCP\Infrastructure\Observability\NullMcpObservabilityHandler::class,
 			$tools,
-			array(),
+			$resources,
 			array(),
 			static function () {
 				if ( ! is_user_logged_in() ) {

@@ -3,7 +3,8 @@
 WordPress plugin that registers **Abilities API** abilities for content, SCF/ACF fields, media, menus,
 options and theme files, and exposes them as a **dedicated MCP server** through the official
 [WordPress MCP Adapter](https://github.com/WordPress/mcp-adapter), which is **bundled** in `vendor/` since v0.4.0. Similar in spirit to `emcp-tools`,
-but with no Elementor dependency: it targets classic/SCF sites.
+with no Elementor dependency: it targets classic/SCF sites. When Elementor 4.x is active, its own builder abilities
+are served on the same server too (v0.6.0, see *Elementor*).
 
 - Endpoint: `/wp-json/wp-mcp-tools/mcp` (server id `wp-mcp-tools`)
 - MCP tool names: `wpmcp-<tool>`, e.g. `wpmcp-list-posts`, `wpmcp-update-fields`
@@ -67,6 +68,17 @@ An unauthenticated MCP request gets `401` with `WWW-Authenticate: Bearer resourc
 | menus | list-menus, get-menu, create-menu, add-menu-item, update-menu-item, delete-menu-item, assign-menu-location |
 | theme (read) | list-theme-files, read-theme-file, search-theme-files |
 | theme-write | write-theme-file, edit-theme-file, delete-theme-file, list-theme-backups, restore-theme-backup |
+| elementor (needs Elementor 4.x) | Elementor's own abilities, named `elementor-<name>`: get-page-structure, create-page, build-composition, manage-elements, update-page-settings, publish-document, create-preview-link, list-posts, list-assets, list-widget-schemas, get-widget-schema, list-dynamic-tags, manage-classes, reorder-classes, manage-global-variable, manage-default-styles, get-default-styles, list-components, manage-component, list-resources, read-resource; Pro: list-site-parts, manage-site-parts. Plus 7 MCP resources (`elementor://global-classes`, `elementor://global-variables`, best practices …) |
+
+## Elementor (v0.6.0)
+
+`includes/integrations/class-elementor.php` bridges **Elementor's built-in MCP module** (Elementor 4.3+, `Elementor\Modules\Mcp`; Pro adds site parts) — it does not re-implement builder logic:
+
+- If Elementor's own MCP setting is off (option `elementor_mcp_enabled`), the bridge registers Elementor's abilities with Elementor's own code (`Abstract_Ability::register()`), so permissions, schemas and checks stay Elementor's. If it is on, Elementor registers them and Elementor's server `/wp-json/elementor/mcp` keeps working as well.
+- Their ids are added to the WP MCP Tools server (tools + resources), so one OAuth / Application Password connection covers WordPress, SCF/ACF and Elementor.
+- Most builder tools (build-composition, manage-elements, classes, variables, components …) need Elementor's **Atomic Editor** (v4, on by default in new Elementor 4 installs). Without it Elementor answers "needs Atomic Editor" and says so in the tool description; `wpmcp-get-site-info` → `elementor.atomic_editor`.
+- Switch off: *MCP Tools → Tools → Elementor* group. Elementor not active → the group shows "Unavailable" and nothing changes.
+- Tested (WP 7.1.3 + SQLite, Elementor 4.3.5 + Pro 4.3.2): `tests/elementor.py` — 22 tools + 7 resources listed, create-page → build-composition (flexbox + heading) → get-page-structure, list-site-parts (Pro); group off → 46 tools; Elementor's own server on at the same time → both servers work.
 
 ## Admin screen (v0.3.1)
 **MCP Tools** (admin menu, plug + spark icon) has two tabs:

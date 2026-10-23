@@ -703,6 +703,7 @@ class WPMCP_Admin {
 			'menus'       => 'dashicons-menu-alt3',
 			'theme'       => 'dashicons-admin-appearance',
 			'theme-write' => 'dashicons-edit-page',
+			'elementor'   => 'dashicons-layout',
 		);
 		return $map[ $slug ] ?? 'dashicons-admin-generic';
 	}
@@ -715,6 +716,9 @@ class WPMCP_Admin {
 		foreach ( $tools as $tool ) {
 			$counts[ $tool['group'] ] = ( $counts[ $tool['group'] ] ?? 0 ) + 1;
 		}
+		// Elementor's own abilities (served through the bridge), listed after ours.
+		$elementor = WPMCP_Elementor::is_available() ? WPMCP_Elementor::catalog() : array();
+		$counts[ WPMCP_Elementor::GROUP ] = count( $elementor );
 		?>
 		<form method="post" action="options.php" id="wpmcp-settings">
 			<?php settings_fields( 'wpmcp' ); ?>
@@ -753,7 +757,7 @@ class WPMCP_Admin {
 		<section class="wpmcp-panel">
 			<div class="wpmcp-panel__head wpmcp-panel__head--row">
 				<div>
-					<h2>Tools <span class="wpmcp-count"><?php echo count( $tools ); ?></span></h2>
+					<h2>Tools <span class="wpmcp-count"><?php echo count( $tools ) + count( $elementor ); ?></span></h2>
 					<p>Every tool this plugin provides. MCP clients see them as <code><?php echo esc_html( WPMCP_NS ); ?>-&lt;tool&gt;</code>.</p>
 				</div>
 				<div class="wpmcp-search">
@@ -777,6 +781,14 @@ class WPMCP_Admin {
 							<td><code><?php echo esc_html( WPMCP_NS . '-' . $slug ); ?></code></td>
 							<td><span class="wpmcp-tag"><?php echo esc_html( $groups[ $tool['group'] ]['label'] ?? $tool['group'] ); ?></span></td>
 							<td><?php echo esc_html( $tool['description'] ); ?></td>
+						</tr>
+					<?php endforeach; ?>
+					<?php $el_live = WPMCP_Elementor::active(); ?>
+					<?php foreach ( $elementor as $row ) : ?>
+						<tr data-group="<?php echo esc_attr( WPMCP_Elementor::GROUP ); ?>" class="<?php echo $el_live ? '' : 'is-off'; ?>">
+							<td><code><?php echo esc_html( $row['name'] ); ?></code><?php echo 'resource' === $row['kind'] ? ' <span class="wpmcp-tag">resource</span>' : ''; ?></td>
+							<td><span class="wpmcp-tag">Elementor</span></td>
+							<td><?php echo esc_html( wp_trim_words( $row['description'], 40 ) ); ?></td>
 						</tr>
 					<?php endforeach; ?>
 					</tbody>
